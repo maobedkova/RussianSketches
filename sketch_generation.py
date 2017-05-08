@@ -1,3 +1,5 @@
+import copy
+
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
 input_file = 'sketch_test.conll'
 
@@ -24,43 +26,51 @@ class RussianSketches:
 
     """The function for adding new sketch candidates in a dictionary"""
     def add_new_sketch_entry(self, first_word, second_word, linkage):
+        # print (first_word, second_word, linkage)
 
-        """The function for adding a new sketch entry"""
-        def create_sketch_entry(first_word, second_word, head, linkage = linkage):
+        """The function for creating a new sketch entry"""
+        def create_sketch_entry(first_word, second_word, head, linkage=linkage):
+            # print ('-Create-')
             sl = SketchLine(first_word, second_word, linkage, head)
             sl.abs_freq = 1
             self.candidates[first_word] = [sl]
+
+        """The function for adding a new sketch entry"""
+        def add_sketch_entry(first_word, second_word, head, linkage = linkage):
+            # print ('-Add-')
+            sl = SketchLine(first_word, second_word, linkage, head)
+            sl.abs_freq = 1
+            self.candidates[first_word] += [sl]
+
+        """The function for changing a sketch entry"""
+        def change_sketch_entry(info, first_word, second_word, head, linkage = linkage):
+            for obj in info:
+                if first_word == obj.first_word and second_word == obj.second_word and \
+                                linkage == obj.linkage and obj.head == head:
+                    # print ('-Change-')
+                    obj.abs_freq += 1
+                    return True
 
         # Check if it is the first entry
         if not self.candidates:
             create_sketch_entry(first_word, second_word, 1)
             create_sketch_entry(second_word, first_word, 2)
         # Change existing sketch entries
-        elif self.candidates[first_word]:
-            for obj in self.candidates[first_word]:
-                if first_word == obj.first_word and second_word == obj.second_word  and \
-                    linkage == obj.linkage and obj.head == 1:
-                    obj.abs_freq += 1
-                elif second_word == obj.first_word and first_word == obj.second_word  and \
-                    linkage == obj.linkage and obj.head == 2:
-                    obj.abs_freq += 1
-        # Add a new sketch entry
         else:
-            create_sketch_entry(first_word, second_word, 1)
-            create_sketch_entry(second_word, first_word, 2)
-
-        # Testing
-        for key in self.candidates:
-            for obj in  self.candidates[key]:
-                print (obj.first_word,
-                       obj.second_word,
-                       obj.linkage,
-                       obj.head,
-                       obj.abs_freq)
+            tmp_dict = copy.deepcopy(self.candidates)
+            if first_word in tmp_dict:
+                if not change_sketch_entry(tmp_dict[first_word], first_word, second_word, 1):
+                    add_sketch_entry(first_word, second_word, 1)
+            if second_word in tmp_dict:
+                if not change_sketch_entry(tmp_dict[second_word], second_word, first_word, 2):
+                    add_sketch_entry(second_word, first_word, 2)
+            if first_word not in tmp_dict and second_word not in tmp_dict:
+                create_sketch_entry(first_word, second_word, 1)
+                create_sketch_entry(second_word, first_word, 2)
 
     """The function for retrieving candidates for sketches"""
     def retrieve_candidates(self, path):
-        # print ('=== Candidate retrieval ===')
+        print ('=== Candidate retrieval ===')
         for infos in self.reading_conll():
             for info_1 in infos:
                 for info_2 in infos:
@@ -68,6 +78,17 @@ class RussianSketches:
                         self.add_new_sketch_entry(info_1[1],    # first word # todo lemmatization
                                                   info_2[1],    # second word # todo lemmatization
                                                   info_2[4])    # type of a linkage
+        # Testing
+        print (self.candidates)
+        for key in self.candidates:
+            print ('KEY', key)
+            for obj in  self.candidates[key]:
+                print (obj.first_word,
+                       obj.second_word,
+                       obj.linkage,
+                       obj.head,
+                       obj.abs_freq)
+            print ('='*30)
 
 
 class SketchLine:
