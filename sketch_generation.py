@@ -7,6 +7,7 @@ class RussianSketches:
     """Attrbutes of the RussianSketches class"""
     def __init__(self):
         self.candidates = {}
+        self.candidates_by_linkage = {}
 
     """The function for reading conll files"""
     def reading_conll(self):
@@ -30,26 +31,29 @@ class RussianSketches:
 
         """The function for creating a new sketch entry"""
         def create_sketch_entry(first_word, second_word, head, linkage=linkage):
-            # print ('-Create-')
             sl = SketchLine(first_word, second_word, linkage, head)
             sl.abs_freq = 1
-            self.candidates[first_word] = [sl]
+            self.candidates[first_word] = {linkage: [sl]}
 
         """The function for adding a new sketch entry"""
         def add_sketch_entry(first_word, second_word, head, linkage = linkage):
-            # print ('-Add-')
             sl = SketchLine(first_word, second_word, linkage, head)
             sl.abs_freq = 1
-            self.candidates[first_word] += [sl]
+            self.candidates[first_word][linkage] += [sl]
 
         """The function for changing a sketch entry"""
         def change_sketch_entry(info, first_word, second_word, head, linkage = linkage):
             for obj in info:
                 if first_word == obj.first_word and second_word == obj.second_word and \
                                 linkage == obj.linkage and obj.head == head:
-                    # print ('-Change-')
                     obj.abs_freq += 1
                     return True
+
+        """The function for adding a new linkage"""
+        def add_new_linkage(first_word, second_word, head, linkage = linkage):
+            sl = SketchLine(first_word, second_word, linkage, head)
+            sl.abs_freq = 1
+            self.candidates[first_word][linkage] = [sl]
 
         # Check if it is the first entry
         if not self.candidates:
@@ -59,11 +63,17 @@ class RussianSketches:
         else:
             tmp_dict = copy.deepcopy(self.candidates)
             if first_word in tmp_dict:
-                if not change_sketch_entry(tmp_dict[first_word], first_word, second_word, 1):
-                    add_sketch_entry(first_word, second_word, 1)
+                if linkage in tmp_dict[first_word]:
+                    if not change_sketch_entry(tmp_dict[first_word][linkage], first_word, second_word, 1):
+                        add_sketch_entry(first_word, second_word, 1)
+                else:
+                    add_new_linkage(first_word, second_word, 1)
             if second_word in tmp_dict:
-                if not change_sketch_entry(tmp_dict[second_word], second_word, first_word, 2):
-                    add_sketch_entry(second_word, first_word, 2)
+                if linkage in tmp_dict[second_word]:
+                    if not change_sketch_entry(tmp_dict[second_word], second_word, first_word, 2):
+                        add_sketch_entry(second_word, first_word, 2)
+                else:
+                    add_new_linkage(second_word, first_word, 2)
             if first_word not in tmp_dict and second_word not in tmp_dict:
                 create_sketch_entry(first_word, second_word, 1)
                 create_sketch_entry(second_word, first_word, 2)
@@ -80,14 +90,16 @@ class RussianSketches:
                                                   info_2[4])    # type of a linkage
         # Testing
         print (self.candidates)
-        for key in self.candidates:
-            print ('KEY', key)
-            for obj in  self.candidates[key]:
-                print (obj.first_word,
-                       obj.second_word,
-                       obj.linkage,
-                       obj.head,
-                       obj.abs_freq)
+        for word in self.candidates:
+            print ('WORD', word)
+            for link in  self.candidates[word]:
+                print ('LINKAGE', link)
+                for obj in self.candidates[word][link]:
+                    print (obj.first_word,
+                           obj.second_word,
+                           obj.linkage,
+                           obj.head,
+                           obj.abs_freq)
             print ('='*30)
 
 
