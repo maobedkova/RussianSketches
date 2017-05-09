@@ -7,8 +7,8 @@ n_xi counts (, w2)
 n_xx counts (*, *), i.e. any bigram
 '''
 
-"""The function for counting contingency tables"""
 def get_contingency_table(candidates, corpus_size):
+    """The function for counting contingency tables"""
     # Get word frequencies
     word_counts = {}
     for word in candidates:
@@ -28,8 +28,8 @@ def get_contingency_table(candidates, corpus_size):
                 # Count Dice statistics
                 obj.dice = BigramAssocMeasures.dice(n_ii, (n_ix, n_xi), n_xx)
 
-"""The function for ranging sketch candidates"""
 def ranging(candidates):
+    """The function for ranging sketch candidates"""
     for word in candidates:
         for linkage in candidates[word]:
             # print (word, linkage, candidates[word][linkage])
