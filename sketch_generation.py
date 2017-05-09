@@ -1,5 +1,5 @@
 import copy
-from association_measures import get_contingency_table
+from association_measures import get_contingency_table, ranging
 
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
 input_file = 'sketch_test.conll'
@@ -8,6 +8,7 @@ class RussianSketches:
     """Attrbutes of the RussianSketches class"""
     def __init__(self):
         self.candidates = {}
+        self.ranged_candidates = {}
         self.corpus_size = 0    # number of bigrams
 
     """The function for reading conll files"""
@@ -95,14 +96,23 @@ class RussianSketches:
     """The function for counting a chosen association measure"""
     def count_association_measure(self):
         get_contingency_table(self.candidates, self.corpus_size)
+        # Range candidates and save the ranged candidates as an attribute
+        for ranged_candidates, linkage, word in ranging(self.candidates):
+            if word in self.ranged_candidates:
+                if linkage in self.ranged_candidates[word]:
+                    self.ranged_candidates[word][linkage] += ranged_candidates  # add ranged candidates
+                else:
+                    self.ranged_candidates[word][linkage] = ranged_candidates  # add linkage entry + ranged candidates
+            else:
+                self.ranged_candidates[word] = {linkage: ranged_candidates}     # add word entry + linkage + ranged candidates
 
         # Testing
-        print (self.candidates)
-        for word in self.candidates:
+        print (self.ranged_candidates)
+        for word in self.ranged_candidates:
             print ('WORD', word)
-            for link in  self.candidates[word]:
+            for link in  self.ranged_candidates[word]:
                 print ('LINKAGE', link)
-                for obj in self.candidates[word][link]:
+                for obj in self.ranged_candidates[word][link]:
                     print (obj.first_word,
                            obj.second_word,
                            obj.linkage,
@@ -121,6 +131,24 @@ class SketchLine:
         self.head = head                # 1 - first word is a head word, 2 - second word is a head word
         self.abs_freq = 0               # absolute frequency of the first word - second word collocation
         self.dice = 0                   # dice coefficient of the first word - second word collocation
+
+    def __eq__(self, other):
+        return self.dice == other.dice
+
+    def __ne__(self, other):
+        return self.dice != other.dice
+
+    def __lt__(self, other):
+        return self.dice < other.dice
+
+    def __gt__(self, other):
+        return self.dice > other.dice
+
+    def __le__(self, other):
+        return self.dice <= other.dice
+
+    def __ge__(self, other):
+        return self.dice >= other.dice
 
 
 """The main function which calling the RussianSketches class"""

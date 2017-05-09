@@ -27,3 +27,11 @@ def get_contingency_table(candidates, corpus_size):
                 n_xx = corpus_size
                 # Count Dice statistics
                 obj.dice = BigramAssocMeasures.dice(n_ii, (n_ix, n_xi), n_xx)
+
+"""The function for ranging sketch candidates"""
+def ranging(candidates):
+    for word in candidates:
+        for linkage in candidates[word]:
+            # print (word, linkage, candidates[word][linkage])
+            ranged_candidates = sorted(candidates[word][linkage])
+            yield ranged_candidates, linkage, word
