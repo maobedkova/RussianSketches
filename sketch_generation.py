@@ -9,9 +9,10 @@ class RussianSketches:
 
     def __init__(self):
         """Attrbutes of the RussianSketches class"""
-        self.candidates = {}
-        self.ranged_candidates = {}
-        self.corpus_size = 0    # number of bigrams
+        self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
+        self.ranged_candidates = {}     # dictionary of ranged by a statistics sketch candidates
+        self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
+        self.corpus_size = 0            # number of bigrams in a corpus
 
     def reading_conll(self):
         """The function for reading conll files"""
@@ -29,59 +30,85 @@ class RussianSketches:
                               splitted[6],  # head word
                               splitted[7]]) # type of a linkage
 
-    def add_new_sketch_entry(self, first_word, second_word, linkage):
+    def add_new_sketch_entry(self, first_word, first_word_pos, second_word, second_word_pos, linkage):
         """The function for adding new sketch candidates in a dictionary"""
-        # print (first_word, second_word, linkage)
 
-        def create_sketch_entry(first_word, second_word, head, linkage=linkage):
+        def create_sketch_entry(first_word, first_word_pos,
+                                second_word, second_word_pos,
+                                head, linkage=linkage):
             """The function for creating a new sketch entry"""
-            sl = SketchEntry(first_word, second_word, linkage, head)
+            sl = SketchEntry(first_word, first_word_pos,
+                             second_word, second_word_pos,
+                             linkage, head)
             sl.abs_freq = 1
             self.candidates[first_word] = {linkage: [sl]}
 
-        def add_sketch_entry(first_word, second_word, head, linkage = linkage):
+        def add_sketch_entry(first_word, first_word_pos,
+                             second_word, second_word_pos,
+                             head, linkage=linkage):
             """The function for adding a new sketch entry"""
-            sl = SketchEntry(first_word, second_word, linkage, head)
+            sl = SketchEntry(first_word, first_word_pos,
+                             second_word, second_word_pos,
+                             linkage, head)
             sl.abs_freq = 1
             self.candidates[first_word][linkage] += [sl]
 
-        def add_new_linkage(first_word, second_word, head, linkage = linkage):
+        def add_new_linkage(first_word, first_word_pos,
+                            second_word, second_word_pos,
+                            head, linkage=linkage):
             """The function for adding a new linkage"""
-            sl = SketchEntry(first_word, second_word, linkage, head)
+            sl = SketchEntry(first_word, first_word_pos,
+                             second_word, second_word_pos,
+                             linkage, head)
             sl.abs_freq = 1
             self.candidates[first_word][linkage] = [sl]
 
-        def change_sketch_entry(info, first_word, second_word, head, linkage = linkage):
+        def change_sketch_entry(info, first_word, first_word_pos,
+                                second_word, second_word_pos,
+                                head, linkage=linkage):
             """The function for changing a sketch entry"""
             for obj in info:
-                if first_word == obj.first_word and second_word == obj.second_word and \
+                if first_word == obj.first_word and first_word_pos == obj.first_word_pos and \
+                        second_word == obj.second_word and second_word_pos == obj.second_word_pos and \
                                 linkage == obj.linkage and obj.head == head:
                     obj.abs_freq += 1
                     return True
 
         # Check if it is the first entry
         if not self.candidates:
-            create_sketch_entry(first_word, second_word, 1)
-            create_sketch_entry(second_word, first_word, 2)
-        # Change existing sketch entries
+            create_sketch_entry(first_word, first_word_pos,
+                                second_word, second_word_pos, 1)
+            create_sketch_entry(second_word, second_word_pos,
+                                first_word, first_word_pos, 2)
+        # Changing existing sketch entries
         else:
             tmp_dict = copy.deepcopy(self.candidates)
             if first_word in tmp_dict:
                 if linkage in tmp_dict[first_word]:
-                    if not change_sketch_entry(tmp_dict[first_word][linkage], first_word, second_word, 1):
-                        add_sketch_entry(first_word, second_word, 1)
+                    if not change_sketch_entry(tmp_dict[first_word][linkage],
+                                               first_word, first_word_pos,
+                                               second_word, second_word_pos, 1):
+                        add_sketch_entry(first_word, first_word_pos,
+                                         second_word, second_word_pos, 1)
                 else:
-                    add_new_linkage(first_word, second_word, 1)
+                    add_new_linkage(first_word, first_word_pos,
+                                    second_word, second_word_pos, 1)
             if second_word in tmp_dict:
                 if linkage in tmp_dict[second_word]:
-                    if not change_sketch_entry(tmp_dict[second_word][linkage], second_word, first_word, 2):
-                        add_sketch_entry(second_word, first_word, 2)
+                    if not change_sketch_entry(tmp_dict[second_word][linkage],
+                                               second_word, second_word_pos,
+                                               first_word, first_word_pos, 2):
+                        add_sketch_entry(second_word, second_word_pos,
+                                         first_word, first_word_pos, 2)
                 else:
-                    add_new_linkage(second_word, first_word, 2)
+                    add_new_linkage(second_word, second_word_pos,
+                                    first_word, first_word_pos, 2)
             if first_word not in tmp_dict:
-                create_sketch_entry(first_word, second_word, 1)
+                create_sketch_entry(first_word, first_word_pos,
+                                    second_word, second_word_pos, 1)
             if second_word not in tmp_dict:
-                create_sketch_entry(second_word, first_word, 2)
+                create_sketch_entry(second_word, second_word_pos,
+                                    first_word, first_word_pos, 2)
 
     def retrieve_candidates(self, path):
         """The function for retrieving candidates for sketches"""
@@ -90,32 +117,53 @@ class RussianSketches:
                 for info_2 in infos:
                     if info_1[0] == info_2[3]:
                         self.corpus_size += 1
+                        # print (info_1[1], info_1[2], info_2[1], info_2[2], info_2[4])
                         self.add_new_sketch_entry(info_1[1],    # first word # todo lemmatization
+                                                  info_1[2],    # part of speech of a first word
                                                   info_2[1],    # second word # todo lemmatization
+                                                  info_2[2],    # part of speech of a second word
                                                   info_2[4])    # type of a linkage
+
+    def create_candidates_dict(self, dict, word, linkage, arr):
+        """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
+        if word in dict:
+            if linkage in dict[word]:
+                dict[word][linkage] += arr  # add candidates
+            else:
+                dict[word][linkage] = arr   # add linkage + candidates
+        else:
+            dict[word] = {linkage: arr}     # add word + linkage + candidates
+
+    def filtering(self):
+        """The function for filtering linkages for every part of speech"""
+        for word in self.ranged_candidates:
+            for linkage in self.ranged_candidates[word]:
+                for obj in self.ranged_candidates[word][linkage]:
+                    # Filtering for NOUN
+                    if obj.first_word_pos == 'NOUN':
+                        possible_noun = ['ADJ', 'ADV', 'VERB']
+                        if obj.second_word_pos in possible_noun:
+                            self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
         get_contingency_table(self.candidates, self.corpus_size)
-        # Range candidates and save the ranged candidates as an attribute
+        # Ranging candidates and saving the ranged candidates as an attribute
         for ranged_candidates, linkage, word in ranging(self.candidates):
-            if word in self.ranged_candidates:
-                if linkage in self.ranged_candidates[word]:
-                    self.ranged_candidates[word][linkage] += ranged_candidates  # add ranged candidates
-                else:
-                    self.ranged_candidates[word][linkage] = ranged_candidates   # add linkage entry + ranged candidates
-            else:
-                self.ranged_candidates[word] = {linkage: ranged_candidates}     # add word entry + linkage + ranged candidates
+            self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
+        self.filtering()
 
         # Testing
-        print (self.ranged_candidates)
-        for word in self.ranged_candidates:
+        print (self.filtered_candidates)
+        for word in self.filtered_candidates:
             print ('WORD', word)
-            for link in  self.ranged_candidates[word]:
+            for link in  self.filtered_candidates[word]:
                 print ('LINKAGE', link)
-                for obj in self.ranged_candidates[word][link]:
+                for obj in self.filtered_candidates[word][link]:
                     print (obj.first_word,
+                           obj.first_word_pos,
                            obj.second_word,
+                           obj.second_word_pos,
                            obj.linkage,
                            obj.head,
                            obj.abs_freq,
@@ -126,14 +174,16 @@ class RussianSketches:
 class SketchEntry:
     """The class of sketch entry which creates entries for sketches used in Russian sketches class"""
 
-    def __init__(self, first_word, second_word, linkage, head):
+    def __init__(self, first_word, first_word_pos, second_word, second_word_pos, linkage, head):
         """Attrbutes of the SketchEntry class"""
-        self.first_word = first_word    # first word text
-        self.second_word = second_word  # second word text
-        self.linkage = linkage          # type of a linkage
-        self.head = head                # 1 - first word is a head word, 2 - second word is a head word
-        self.abs_freq = 0               # absolute frequency of the first word - second word collocation
-        self.dice = 0                   # dice coefficient of the first word - second word collocation
+        self.first_word = first_word            # first word text
+        self.first_word_pos = first_word_pos    # part of speech of a first word
+        self.second_word = second_word          # second word text
+        self.second_word_pos = second_word_pos  # part of speech of a second word
+        self.linkage = linkage                  # type of a linkage
+        self.head = head                        # 1 - first word is a head word, 2 - second word is a head word
+        self.abs_freq = 0                       # absolute frequency of the first word - second word collocation
+        self.dice = 0                           # dice coefficient of the first word - second word collocation
 
     # Rewrite ==, !=, <, >, <=, >= python functions for proper sorting of sketches
     def __eq__(self, other):
@@ -154,9 +204,8 @@ class SketchEntry:
     def __ge__(self, other):
         return self.dice >= other.dice
 
-
+"""The main function which calling the RussianSketches class"""
 if __name__ == '__main__':
-    """The main function which calling the RussianSketches class"""
     rs = RussianSketches()
     rs.retrieve_candidates(path)
     rs.count_association_measure()
