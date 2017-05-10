@@ -136,14 +136,38 @@ class RussianSketches:
 
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
+
+        def filter_pos(pos, possible_pos, obj = obj, word = word, linkage = linkage):
+            """The function for filter linkages by a given part of speech"""
+            if obj.first_word_pos == pos:
+                if obj.second_word_pos in possible_pos:
+                    self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+
+        # todo trigrams
         for word in self.ranged_candidates:
             for linkage in self.ranged_candidates[word]:
                 for obj in self.ranged_candidates[word][linkage]:
-                    # Filtering for NOUN
-                    if obj.first_word_pos == 'NOUN':
-                        possible_noun = ['ADJ', 'ADV', 'VERB']
-                        if obj.second_word_pos in possible_noun:
-                            self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                    # Filtering for nouns
+                    possible_noun = ['ADJ', 'ADV', 'VERB']
+                    filter_pos('NOUN', possible_noun)
+                    # Filtering for adjectives
+                    possible_adj = ['ADV', 'ADJ', 'NOUN']
+                    filter_pos('ADJ', possible_adj)
+                    # Filtering for verbs
+                    possible_verb = ['ADV', 'NOUN']
+                    filter_pos('VERB', possible_verb)
+                    # Filtering for adverbs
+                    possible_adv = ['VERB', 'ADV', 'NOUN', 'ADJ']
+                    filter_pos('ADV', possible_adv)
+                    # Filtering for conjunctions
+                    possible_conj = []
+                    filter_pos('CONJ', possible_conj)
+                    # Filtering for adpositions
+                    possible_adp = []
+                    filter_pos('ADP', possible_adp)
+                    # Filtering for particles
+                    possible_part = ['VERB']
+                    filter_pos('PART', possible_part)
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
