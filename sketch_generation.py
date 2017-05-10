@@ -137,7 +137,7 @@ class RussianSketches:
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
 
-        def filter_pos(pos, possible_pos, obj = obj, word = word, linkage = linkage):
+        def filter_pos(pos, possible_pos, obj, word, linkage):
             """The function for filter linkages by a given part of speech"""
             if obj.first_word_pos == pos:
                 if obj.second_word_pos in possible_pos:
@@ -149,25 +149,25 @@ class RussianSketches:
                 for obj in self.ranged_candidates[word][linkage]:
                     # Filtering for nouns
                     possible_noun = ['ADJ', 'ADV', 'VERB']
-                    filter_pos('NOUN', possible_noun)
+                    filter_pos('NOUN', possible_noun, obj, word, linkage)
                     # Filtering for adjectives
                     possible_adj = ['ADV', 'ADJ', 'NOUN']
-                    filter_pos('ADJ', possible_adj)
+                    filter_pos('ADJ', possible_adj, obj, word, linkage)
                     # Filtering for verbs
                     possible_verb = ['ADV', 'NOUN']
-                    filter_pos('VERB', possible_verb)
+                    filter_pos('VERB', possible_verb, obj, word, linkage)
                     # Filtering for adverbs
                     possible_adv = ['VERB', 'ADV', 'NOUN', 'ADJ']
-                    filter_pos('ADV', possible_adv)
+                    filter_pos('ADV', possible_adv, obj, word, linkage)
                     # Filtering for conjunctions
                     possible_conj = []
-                    filter_pos('CONJ', possible_conj)
+                    filter_pos('CONJ', possible_conj, obj, word, linkage)
                     # Filtering for adpositions
                     possible_adp = []
-                    filter_pos('ADP', possible_adp)
+                    filter_pos('ADP', possible_adp, obj, word, linkage)
                     # Filtering for particles
                     possible_part = ['VERB']
-                    filter_pos('PART', possible_part)
+                    filter_pos('PART', possible_part, obj, word, linkage)
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
