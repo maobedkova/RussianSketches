@@ -13,6 +13,14 @@ class RussianSketches:
         self.ranged_candidates = {}     # dictionary of ranged by a statistics sketch candidates
         self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
         self.corpus_size = 0            # number of bigrams in a corpus
+        self.possible_pos = {'NOUN': ['ADJ', 'ADV', 'VERB'],
+                             'ADJ': ['ADV', 'ADJ', 'NOUN'],
+                             'VERB': ['ADV', 'NOUN'],
+                             'ADV': ['VERB', 'ADV', 'NOUN', 'ADJ'],
+                             'CONJ': [],
+                             'ADP': [],
+                             'PART': ['VERB']
+                             }          # dictionary of part of speeches that are allowed
 
     def reading_conll(self):
         """The function for reading conll files"""
@@ -35,7 +43,8 @@ class RussianSketches:
 
         def create_sketch_entry(first_word, first_word_pos,
                                 second_word, second_word_pos,
-                                head, linkage=linkage):
+                                head, linkage=linkage,
+                                filter = True):
             """The function for creating a new sketch entry"""
             sl = SketchEntry(first_word, first_word_pos,
                              second_word, second_word_pos,
@@ -137,37 +146,16 @@ class RussianSketches:
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
 
-        def filter_pos(pos, possible_pos, obj, word, linkage):
+        def filter_pos(obj, word, linkage):
             """The function for filter linkages by a given part of speech"""
-            if obj.first_word_pos == pos:
-                if obj.second_word_pos in possible_pos:
+            if obj.first_word_pos in self.possible_pos:
+                if obj.second_word_pos in self.possible_pos[obj.first_word_pos]:
                     self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
-        # todo trigrams
         for word in self.ranged_candidates:
             for linkage in self.ranged_candidates[word]:
                 for obj in self.ranged_candidates[word][linkage]:
-                    # Filtering for nouns
-                    possible_noun = ['ADJ', 'ADV', 'VERB']
-                    filter_pos('NOUN', possible_noun, obj, word, linkage)
-                    # Filtering for adjectives
-                    possible_adj = ['ADV', 'ADJ', 'NOUN']
-                    filter_pos('ADJ', possible_adj, obj, word, linkage)
-                    # Filtering for verbs
-                    possible_verb = ['ADV', 'NOUN']
-                    filter_pos('VERB', possible_verb, obj, word, linkage)
-                    # Filtering for adverbs
-                    possible_adv = ['VERB', 'ADV', 'NOUN', 'ADJ']
-                    filter_pos('ADV', possible_adv, obj, word, linkage)
-                    # Filtering for conjunctions
-                    possible_conj = []
-                    filter_pos('CONJ', possible_conj, obj, word, linkage)
-                    # Filtering for adpositions
-                    possible_adp = []
-                    filter_pos('ADP', possible_adp, obj, word, linkage)
-                    # Filtering for particles
-                    possible_part = ['VERB']
-                    filter_pos('PART', possible_part, obj, word, linkage)
+                    filter_pos(obj, word, linkage)
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
