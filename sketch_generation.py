@@ -14,14 +14,40 @@ class RussianSketches:
         self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
         self.trigram_corpus_size = 0    # number of trigrams in a corpus
-        self.possible_pos = {'NOUN': ['ADJ', 'ADV', 'VERB'],
-                             'ADJ': ['ADV', 'ADJ', 'NOUN'],
-                             'VERB': ['ADV', 'NOUN'],
-                             'ADV': ['VERB', 'ADV', 'NOUN', 'ADJ'],
-                             'CONJ': [],
-                             'ADP': [],
-                             'PART': ['VERB']
-                             }          # dictionary of part of speeches that are allowed
+        self.possible_bigrams = {
+            'NOUN': ['ADJ', 'ADV', 'VERB'],
+            'ADJ': ['ADV', 'ADJ', 'NOUN'],
+            'VERB': ['ADV', 'NOUN'],
+            'ADV': ['VERB', 'ADV', 'NOUN', 'ADJ'],
+            'CONJ': [],
+            'ADP': [],
+            'PART': ['VERB']
+        }                               # dictionary of part of speeches that are allowed for bigrams
+        self.possible_trigrams = {
+            'NOUN': {'ADP': ['NOUN', 'VERB'],
+                     'NOUN': ['ADP', 'CONJ'],
+                     'VERB': ['ADP'],
+                     'CONJ': ['NOUN']},
+            'ADJ': {'ADP': ['NOUN'],
+                    'NOUN': ['ADP'],
+                    'CONJ': ['ADJ'],
+                    'ADJ': ['CONJ']},
+            'VERB': {'ADP': ['NOUN'],
+                     'NOUN': ['ADP', 'NOUN'],
+                     'CONJ': ['VERB'],
+                     'VERB': ['CONJ', 'SCONJ'],
+                     'SCONJ': ['VERB']},
+            'CONJ': {'CONJ': ['VERB', 'ADV', 'NOUN', 'ADJ'],
+                     'VERB': ['CONJ'],
+                     'ADV': ['CONJ'],
+                     'NOUN': ['CONJ'],
+                     'ADJ': ['CONJ']},
+            'ADV': {'ADV': ['CONJ'],
+                    'CONJ': ['ADV']},
+            'ADP': {'NOUN': ['NOUN', 'VERB', 'ADJ'],
+                    'VERB': ['NOUN'],
+                    'ADJ': ['NOUN']}
+        }                               # dictionary of part of speeches that are allowed for trigrams
 
     def reading_conll(self):
         """The function for reading conll files"""
@@ -156,24 +182,32 @@ class RussianSketches:
                                 info_3[2]   # part of speech of a third word
                             )
 
+    def create_candidates_dict(self, dict, word, linkage, arr):
+        """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
+        if word in dict:
+            if linkage in dict[word]:
+                dict[word][linkage] += arr  # add candidates
+            else:
+                dict[word][linkage] = arr  # add linkage + candidates
+        else:
+            dict[word] = {linkage: arr}  # add word + linkage + candidates
+
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
 
-        def create_candidates_dict(dict, word, linkage, arr):
-            """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
-            if word in dict:
-                if linkage in dict[word]:
-                    dict[word][linkage] += arr  # add candidates
-                else:
-                    dict[word][linkage] = arr   # add linkage + candidates
-            else:
-                dict[word] = {linkage: arr}     # add word + linkage + candidates
-
         def filter_pos(obj, word, linkage):
             """The function for filter linkages by a given part of speech"""
-            if obj.first_word_pos in self.possible_pos:
-                if obj.second_word_pos in self.possible_pos[obj.first_word_pos]:
-                    create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+            # Filtering trigrams
+            if obj.third_word:
+                if obj.first_word_pos in self.possible_trigrams:
+                    if obj.second_word_pos in self.possible_trigrams[obj.first_word_pos]:
+                        if obj.third_word_pos in self.possible_trigrams[obj.first_word_pos][obj.second_word_pos]:
+                            self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+            # Filtering bigrams
+            else:
+                if obj.first_word_pos in self.possible_bigrams:
+                    if obj.second_word_pos in self.possible_bigrams[obj.first_word_pos]:
+                        self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
         for word in self.ranged_candidates:
             for linkage in self.ranged_candidates[word]:
@@ -182,11 +216,11 @@ class RussianSketches:
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
-        # get_contingency_table(self.candidates, self.corpus_size)
+        get_contingency_table(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
         # Ranging candidates and saving the ranged candidates as an attribute
-        # for ranged_candidates, linkage, word in ranging(self.candidates):
-        #     self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
-        # self.filtering()
+        for ranged_candidates, linkage, word in ranging(self.candidates):
+            self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
+        self.filtering()
 
         # Testing
         print (self.candidates)
