@@ -1,4 +1,5 @@
 import copy
+import pymorphy2
 from association_measures import get_contingency_table, ranging
 
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
@@ -153,6 +154,22 @@ class RussianSketches:
                 if third_word not in tmp_dict:
                     create_entry(third_word)
 
+    def lemmatization(self, word, pos):
+        """The function for word lemmatization"""
+        morph = pymorphy2.MorphAnalyzer()
+        lemma = None
+        for i in range(0, len(morph.parse(word))):
+            p = morph.parse(word)[i]
+            try:
+                if p.tag.POS == pos:
+                    lemma = p.normal_form
+            except:
+                pass
+        if not lemma:
+            lemma = morph.parse(word)[0].normal_form
+        return lemma
+        # ADJF, CONJ, PRTS, NUMR, PRED, PREP, INTJ, INFN, GRND, NPRO, ADVB, PRCL, PRTF, COMP, VERB, ADJS, NOUN
+
     def retrieve_candidates(self, path):
         """The function for retrieving candidates for sketches"""
         for infos in self.reading_conll():
@@ -162,11 +179,11 @@ class RussianSketches:
                     if info_1[0] == info_2[3]:
                         self.bigram_corpus_size += 1
                         self.add_sketch_entry(
-                            info_2[4],  # type of a linkage
-                            info_1[1],  # first word # todo lemmatization
-                            info_1[2],  # part of speech of a first word
-                            info_2[1],  # second word # todo lemmatization
-                            info_2[2]   # part of speech of a second word
+                            info_2[4],                                  # type of a linkage
+                            self.lemmatization(info_1[1], info_1[2]),   # first word
+                            info_1[2],                                  # part of speech of a first word
+                            self.lemmatization(info_2[1], info_2[2]),   # second word
+                            info_2[2]                                   # part of speech of a second word
                         )
                     # Retrieving trigram candidates
                     for info_3 in infos:
@@ -174,12 +191,12 @@ class RussianSketches:
                             self.trigram_corpus_size += 1
                             self.add_sketch_entry(
                                 info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
-                                info_1[1],  # first word # todo lemmatization
-                                info_1[2],  # part of speech of a first word
-                                info_2[1],  # second word # todo lemmatization
-                                info_2[2],  # part of speech of a second word
-                                info_3[1],  # third word # todo lemmatization
-                                info_3[2]   # part of speech of a third word
+                                self.lemmatization(info_1[1], info_1[2]),       # first word
+                                info_1[2],                                      # part of speech of a first word
+                                self.lemmatization(info_2[1], info_2[2]),       # second word
+                                info_2[2],                                      # part of speech of a second word
+                                self.lemmatization(info_3[1], info_3[2]),       # third word
+                                info_3[2]                                       # part of speech of a third word
                             )
 
     def create_candidates_dict(self, dict, word, linkage, arr):
@@ -188,9 +205,9 @@ class RussianSketches:
             if linkage in dict[word]:
                 dict[word][linkage] += arr  # add candidates
             else:
-                dict[word][linkage] = arr  # add linkage + candidates
+                dict[word][linkage] = arr   # add linkage + candidates
         else:
-            dict[word] = {linkage: arr}  # add word + linkage + candidates
+            dict[word] = {linkage: arr}     # add word + linkage + candidates
 
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
