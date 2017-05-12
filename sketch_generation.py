@@ -1,6 +1,6 @@
 import copy
 import pymorphy2
-from association_measures import get_contingency_table, ranging
+from association_measures import count_statistics, ranging
 
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
 input_file = 'sketch_test.conll'
@@ -172,6 +172,7 @@ class RussianSketches:
 
     def retrieve_candidates(self, path):
         """The function for retrieving candidates for sketches"""
+        print ('=== Retrieving candidates ===')
         for infos in self.reading_conll():
             for info_1 in infos:
                 for info_2 in infos:
@@ -211,6 +212,7 @@ class RussianSketches:
 
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
+        print ('=== Filtering candidates ===')
 
         def filter_pos(obj, word, linkage):
             """The function for filter linkages by a given part of speech"""
@@ -233,19 +235,20 @@ class RussianSketches:
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
-        get_contingency_table(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
+        count_statistics(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
         # Ranging candidates and saving the ranged candidates as an attribute
+        print ('=== Ranging candidates ===')
         for ranged_candidates, linkage, word in ranging(self.candidates):
             self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
         self.filtering()
 
         # Testing
-        print (self.candidates)
-        for word in self.candidates:
+        print (self.filtered_candidates)
+        for word in self.filtered_candidates:
             print ('WORD', word)
-            for link in  self.candidates[word]:
+            for link in  self.filtered_candidates[word]:
                 print ('LINKAGE', link)
-                for obj in self.candidates[word][link]:
+                for obj in self.filtered_candidates[word][link]:
                     print (obj.first_word,
                            obj.first_word_pos,
                            obj.second_word,
@@ -254,7 +257,15 @@ class RussianSketches:
                            obj.third_word_pos,
                            obj.linkage,
                            obj.abs_freq,
-                           obj.dice)
+                           obj.dice,
+                           obj.chi,
+                           obj.t_test,
+                           obj.poisson_stirling,
+                           obj.pmi,
+                           obj.mi,
+                           obj.likelihood_ratio,
+                           obj.jaccard,
+                           obj.fisher)
             print ('='*30)
 
 
@@ -273,9 +284,18 @@ class SketchEntry:
         self.third_word_pos = third_word_pos    # part of speech of a third word
         self.linkage = linkage                  # type of a linkage
         self.abs_freq = 0                       # absolute frequency of the first word - second word collocation
-        self.dice = 0                           # dice coefficient of the first word - second word collocation
+        # Different association measures for sketches
+        self.dice = 0               # + +
+        self.poisson_stirling = 0   # + +
+        self.fisher = 0             # +
+        self.chi = 0                # + +
+        self.likelihood_ratio = 0   # + +
+        self.mi = 0                 # + +
+        self.jaccard = 0            # + +
+        self.pmi = 0                # + +
+        self.t_test = 0             # + +
 
-    # Rewrite ==, !=, <, >, <=, >= python functions for proper sorting of sketches
+    # Rewriting ==, !=, <, >, <=, >= python functions for proper sorting of sketches
     def __eq__(self, other):
         return self.dice == other.dice
 
