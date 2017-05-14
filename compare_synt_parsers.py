@@ -71,7 +71,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
                     true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
                                                                 true, false,
                                                                 accuracy, accuracy_rel)
-                    print (true, false, accuracy)
+                    # print (true, false, accuracy)
                 gs_arr = []
                 sp_arr = []
                 n = 0
@@ -153,17 +153,16 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
                 gs_sn_arr = []
                 ud_arr = []
 
-
-    print ('=== Accuracy for UDpipe ===')
-    print ('Accuracy for the whole text:', float(ud_true) / float(ud_true + ud_false))
-    print ('Mean accuracy for every sentence:', numpy.mean(ud_accuracy))
-    print ('Mean accuracy for every sentence with higher weight for root:', numpy.mean(ud_accuracy_rel))
-
-    print ('=== Accuracy for SyntaxNet ===')
-    print ('Accuracy for the whole text:', float(sn_true) / float(sn_true + sn_false))
-    print ('Mean accuracy for every sentence:', numpy.mean(sn_accuracy))
-    print ('Mean accuracy for every sentence with higher weight for root:', numpy.mean(sn_accuracy_rel))
-
+    # Writing down
+    with open('parsers_results.txt', 'w', 'utf-8') as w:
+        w.write('=== Accuracy for UDpipe ===\n')
+        w.write('Accuracy for the whole text: ' + str(float(ud_true) / float(ud_true + ud_false)) + '\n')
+        w.write('Mean accuracy for every sentence: ' + str(numpy.mean(ud_accuracy)) + '\n')
+        w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(ud_accuracy_rel)) + '\n\n')
+        w.write('=== Accuracy for SyntaxNet ===\n')
+        w.write('Accuracy for the whole text: ' + str(float(sn_true) / float(sn_true + sn_false)) + '\n')
+        w.write('Mean accuracy for every sentence: ' + str(numpy.mean(sn_accuracy)) + '\n')
+        w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(sn_accuracy_rel)) + '\n')
 
 if __name__ == '__main__':
     # form_dataset(path)
