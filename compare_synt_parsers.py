@@ -155,6 +155,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
 
     # Writing down
     with open('parsers_results.txt', 'w', 'utf-8') as w:
+        w.write('The number of sentences processed: ' + str(len(ud_accuracy)) + '\n')
         w.write('=== Accuracy for UDpipe ===\n')
         w.write('Accuracy for the whole text: ' + str(float(ud_true) / float(ud_true + ud_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(ud_accuracy)) + '\n')
