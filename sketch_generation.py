@@ -10,11 +10,6 @@ morph = pymorphy2.MorphAnalyzer()
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-#     [существительное] + и + существительное
-#     [прилагательное] + и + прилагательное
-# [глагол] + и + глагол
-# [наречие] + и + наречие
-
     def __init__(self, noun='NOUN', adj='ADJ', verb='VERB', adv='ADV', praed=None, adp='ADP'):
         """Attrbutes of the RussianSketches class"""
         self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
@@ -153,7 +148,7 @@ class RussianSketches:
         if not lemma:
             lemma = morph.parse(word)[0].normal_form
         return lemma
-        # ADJF, CONJ, PRTS, NUMR, PRED, PREP, INTJ, INFN, GRND, NPRO, ADVB, PRCL, PRTF, COMP, VERB, ADJS, NOUN
+        # todo ADJF, CONJ, PRTS, NUMR, PRED, PREP, INTJ, INFN, GRND, NPRO, ADVB, PRCL, PRTF, COMP, VERB, ADJS, NOUN
 
     def retrieve_candidates(self, path):
         """The function for retrieving candidates for sketches"""
@@ -197,20 +192,52 @@ class RussianSketches:
 
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
+
         print ('=== Filtering candidates ===')
 
+        def filter_check_trigrams(pos1, pos2, pos3):
+            """The function for checking the presence in the dictionary"""
+            if pos1 in self.possible_trigrams \
+                    and pos2 in self.possible_trigrams[pos1] \
+                    and pos3 in self.possible_trigrams[pos1][pos2]:
+                self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                return True
+
+        def filter_check_conj(word, pos2, pos3):
+            """The function for checking the presence of the conjunction и"""
+            if word == 'и' and pos2 == pos3:
+                print ('И', obj.first_word, obj.second_word, obj.third_word)
+                self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                return True
+
         def filter_pos(obj, word, linkage):
-            """The function for filter linkages by a given part of speech"""
+            """The function for filtering linkages by a given part of speech"""
             # Filtering trigrams
             if obj.third_word:
-                if obj.first_word_pos in self.possible_trigrams:
-                    if obj.second_word_pos in self.possible_trigrams[obj.first_word_pos]:
-                        if obj.third_word_pos in self.possible_trigrams[obj.first_word_pos][obj.second_word_pos]:
-                            self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                if word == obj.first_word:
+                    if not filter_check_conj(obj.second_word, obj.first_word_pos, obj.third_word_pos):
+                        if not filter_check_conj(obj.third_word, obj.first_word_pos, obj.second_word_pos):
+                            if not filter_check_trigrams(obj.first_word_pos, obj.second_word_pos, obj.third_word_pos):
+                                filter_check_trigrams(obj.first_word_pos, obj.third_word_pos, obj.second_word_pos)
+                elif word == obj.second_word:
+                    if not filter_check_conj(obj.first_word, obj.second_word_pos, obj.third_word_pos):
+                        if not filter_check_conj(obj.third_word, obj.first_word_pos, obj.second_word_pos):
+                            if not filter_check_trigrams(obj.second_word_pos, obj.first_word_pos, obj.third_word_pos):
+                                filter_check_trigrams(obj.second_word_pos, obj.third_word_pos, obj.first_word_pos)
+                else:
+                    if not filter_check_conj(obj.second_word, obj.first_word_pos, obj.third_word_pos):
+                        if not filter_check_conj(obj.first_word, obj.third_word_pos, obj.second_word_pos):
+                            if not filter_check_trigrams(obj.third_word_pos, obj.second_word_pos, obj.first_word_pos):
+                                filter_check_trigrams(obj.third_word_pos, obj.first_word_pos, obj.second_word_pos)
             # Filtering bigrams
             else:
-                if obj.first_word_pos in self.possible_bigrams:
-                    if obj.second_word_pos in self.possible_bigrams[obj.first_word_pos]:
+                if word == obj.first_word:
+                    if obj.first_word_pos in self.possible_bigrams \
+                            and obj.second_word_pos in self.possible_bigrams[obj.first_word_pos]:
+                        self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                else:
+                    if obj.second_word_pos in self.possible_bigrams \
+                            and obj.first_word_pos in self.possible_bigrams[obj.second_word_pos]:
                         self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
         for word in self.candidates:
