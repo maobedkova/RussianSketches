@@ -5,10 +5,17 @@ from association_measures import count_statistics, ranging
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
 input_file = 'sketch_test.conll'
 
+morph = pymorphy2.MorphAnalyzer()
+
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-    def __init__(self):
+#     [существительное] + и + существительное
+#     [прилагательное] + и + прилагательное
+# [глагол] + и + глагол
+# [наречие] + и + наречие
+
+    def __init__(self, noun='NOUN', adj='ADJ', verb='VERB', adv='ADV', praed=None, adp='ADP'):
         """Attrbutes of the RussianSketches class"""
         self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
         self.ranged_candidates = {}     # dictionary of ranged by a statistics sketch candidates
@@ -16,38 +23,17 @@ class RussianSketches:
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
         self.trigram_corpus_size = 0    # number of trigrams in a corpus
         self.possible_bigrams = {
-            'NOUN': ['ADJ', 'ADV', 'VERB'],
-            'ADJ': ['ADV', 'ADJ', 'NOUN'],
-            'VERB': ['ADV', 'NOUN'],
-            'ADV': ['VERB', 'ADV', 'NOUN', 'ADJ'],
-            'CONJ': [],
-            'ADP': [],
-            'PART': ['VERB']
+            noun: [adj, adv, verb, noun],
+            adj: [adv, noun],
+            verb: [adv, noun],
+            adv: [verb, noun],
+            praed: [adv, noun, verb]
         }                               # dictionary of part of speeches that are allowed for bigrams
         self.possible_trigrams = {
-            'NOUN': {'ADP': ['NOUN', 'VERB'],
-                     'NOUN': ['ADP', 'CONJ'],
-                     'VERB': ['ADP'],
-                     'CONJ': ['NOUN']},
-            'ADJ': {'ADP': ['NOUN'],
-                    'NOUN': ['ADP'],
-                    'CONJ': ['ADJ'],
-                    'ADJ': ['CONJ']},
-            'VERB': {'ADP': ['NOUN'],
-                     'NOUN': ['ADP', 'NOUN'],
-                     'CONJ': ['VERB'],
-                     'VERB': ['CONJ', 'SCONJ'],
-                     'SCONJ': ['VERB']},
-            'CONJ': {'CONJ': ['VERB', 'ADV', 'NOUN', 'ADJ'],
-                     'VERB': ['CONJ'],
-                     'ADV': ['CONJ'],
-                     'NOUN': ['CONJ'],
-                     'ADJ': ['CONJ']},
-            'ADV': {'ADV': ['CONJ'],
-                    'CONJ': ['ADV']},
-            'ADP': {'NOUN': ['NOUN', 'VERB', 'ADJ'],
-                    'VERB': ['NOUN'],
-                    'ADJ': ['NOUN']}
+            noun: {adp: [noun, verb]},
+            adj: {adp: [noun]},
+            verb: {adp: [noun]},
+            praed: {adp: [noun]}
         }                               # dictionary of part of speeches that are allowed for trigrams
 
     def reading_conll(self):
@@ -154,9 +140,8 @@ class RussianSketches:
                 if third_word not in tmp_dict:
                     create_entry(third_word)
 
-    def lemmatization(self, word, pos):
+    def lemmatization(self, word, pos, morph=morph):
         """The function for word lemmatization"""
-        morph = pymorphy2.MorphAnalyzer()
         lemma = None
         for i in range(0, len(morph.parse(word))):
             p = morph.parse(word)[i]
@@ -228,18 +213,18 @@ class RussianSketches:
                     if obj.second_word_pos in self.possible_bigrams[obj.first_word_pos]:
                         self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
-        for word in self.ranged_candidates:
-            for linkage in self.ranged_candidates[word]:
-                for obj in self.ranged_candidates[word][linkage]:
+        for word in self.candidates:
+            for linkage in self.candidates[word]:
+                for obj in self.candidates[word][linkage]:
                     filter_pos(obj, word, linkage)
 
     def count_association_measure(self):
         """The function for counting a chosen association measure"""
         count_statistics(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
-        # Ranging candidates and saving the ranged candidates as an attribute
-        print ('=== Ranging candidates ===')
-        for ranged_candidates, linkage, word in ranging(self.candidates):
-            self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
+        # # Ranging candidates and saving the ranged candidates as an attribute
+        # print ('=== Ranging candidates ===')
+        # for ranged_candidates, linkage, word in ranging(self.candidates):
+        #     self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
         self.filtering()
 
         # Testing
@@ -259,7 +244,7 @@ class RussianSketches:
                            obj.abs_freq,
                            obj.dice,
                            obj.chi,
-                           obj.t_test,
+                           obj.t_score,
                            obj.poisson_stirling,
                            obj.pmi,
                            obj.mi,
@@ -293,7 +278,7 @@ class SketchEntry:
         self.mi = 0                 # + +
         self.jaccard = 0            # + +
         self.pmi = 0                # + +
-        self.t_test = 0             # + +
+        self.t_score = 0            # + +
 
     # Rewriting ==, !=, <, >, <=, >= python functions for proper sorting of sketches
     def __eq__(self, other):

@@ -35,7 +35,6 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                         n_xii = word_counts[obj.second_word + '_' + obj.third_word]
                     else:
                         n_xii = 0
-                    print (n_xii, n_ixi, n_iix)
                     n_xxx = trigram_corpus_size             # counts any trigram
 
                     # Counting association measures for trigrams
@@ -48,10 +47,10 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                                                                (n_iix, n_ixi, n_xii),
                                                                (n_ixx, n_xix, n_xxi),
                                                                n_xxx)
-                    obj.likelihood_ratio = TrigramAssocMeasures.likelihood_ratio(n_iii,
-                                                                                 (n_iix, n_ixi, n_xii),
-                                                                                 (n_ixx, n_xix, n_xxi),
-                                                                                 n_xxx)
+                    # obj.likelihood_ratio = TrigramAssocMeasures.likelihood_ratio(n_iii,
+                    #                                                              (n_iix, n_ixi, n_xii),
+                    #                                                              (n_ixx, n_xix, n_xxi),
+                    #                                                              n_xxx)
                     obj.mi = TrigramAssocMeasures.mi_like(n_iii,
                                                           (n_iix, n_ixi, n_xii),
                                                           (n_ixx, n_xix, n_xxi),
@@ -64,7 +63,7 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                                                                                  (n_iix, n_ixi, n_xii),
                                                                                  (n_ixx, n_xix, n_xxi),
                                                                                  n_xxx)
-                    obj.t_test = TrigramAssocMeasures.student_t(n_iii,
+                    obj.t_score = TrigramAssocMeasures.student_t(n_iii,
                                                                 (n_iix, n_ixi, n_xii),
                                                                 (n_ixx, n_xix, n_xxi),
                                                                 n_xxx)
@@ -78,7 +77,7 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                     # Counting the Dice statistics for bigrams
                     obj.dice = BigramAssocMeasures.dice(n_ii, (n_ix, n_xi), n_xx)
                     obj.chi = BigramAssocMeasures.chi_sq(n_ii, (n_ix, n_xi), n_xx)
-                    obj.t_test = BigramAssocMeasures.student_t(n_ii, (n_ix, n_xi), n_xx)
+                    obj.t_score = BigramAssocMeasures.student_t(n_ii, (n_ix, n_xi), n_xx)
                     obj.poisson_stirling = BigramAssocMeasures.poisson_stirling(n_ii, (n_ix, n_xi), n_xx)
                     obj.pmi = BigramAssocMeasures.pmi(n_ii, (n_ix, n_xi), n_xx)
                     obj.mi = BigramAssocMeasures.mi_like(n_ii, (n_ix, n_xi), n_xx)
@@ -92,3 +91,4 @@ def ranging(candidates):
         for linkage in candidates[word]:
             ranged_candidates = sorted(candidates[word][linkage], reverse=True)
             yield ranged_candidates, linkage, word
+

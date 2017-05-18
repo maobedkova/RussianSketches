@@ -1,17 +1,13 @@
 import numpy
+import codecs
 
-# path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
-# input_file = 'UD-all.conll'
-# output_file = 'raw_text.txt'
+path = ''
+input_file = 'UD-all.conll'
+output_file = 'raw_text.txt'
 
-# golden_standard_file = 'UD-all.conll'
-# udpipe_file = 'parsed_udpipe.conll'
-# syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
-
-path = 'C:\\Users\\Maria\\Downloads\\'
-golden_standard_file = 'UD-dev_04072016_GOLD_II.conll'
-udpipe_file = 'UD_out_II.conll'
-syntaxnet_file = 'UD_out_II.conll'
+golden_standard_file = 'UD-all.conll'
+udpipe_file = 'parsed_udpipe.conll'
+syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
 
 def form_dataset(path):
     '''The function for writing a raw text from conll dataset'''
@@ -70,28 +66,28 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
 
     def find_equivalent_line(n, mark, sp, gs, sp_line, gs_line, sp_arr, gs_arr, true, false, accuracy, accuracy_rel):
         """The function for finding equivalent lines in the golden standard and in a parser output"""
-        if not sp < gs:
-            if (len(sp_line) == 1 or sp_line.startswith('#')) or len(gs_line) == 1:
-                if len(gs_line) == 1:
-                    if gs_arr != []:
-                        true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
-                                                                    true, false,
-                                                                    accuracy, accuracy_rel)
-                        # print (true, false, accuracy)
-                    gs_arr = []
-                    sp_arr = []
-                    n = 0
-                    sp = gs
-            else:
-                gs_splitted = gs_line.strip().split('\t')
-                sp_splitted = sp_line.strip().split('\t')
-                if gs_splitted[1] == sp_splitted[1] and gs == sp:
-                    # print ('GOT!', gs_splitted[1], sp_splitted[1], gs, sp)
-                    gs_arr.append(gs_splitted[6])
-                    sp_arr.append(sp_splitted[6])
-                    sp += 1
-                    n = 1
-                    mark += 1
+        if (len(sp_line) < 3 or sp_line.startswith('#')) or len(gs_line) < 3:
+            if len(gs_line) < 3:
+                if gs_arr != []:
+                    print ('WRITTEN!')
+                    true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
+                                                                true, false,
+                                                                accuracy, accuracy_rel)
+                    # print (true, false, accuracy)
+                gs_arr = []
+                sp_arr = []
+                n = 0
+                sp = gs
+        else:
+            gs_splitted = gs_line.strip().split('\t')
+            sp_splitted = sp_line.strip().split('\t')
+            if gs_splitted[1] == sp_splitted[1] and gs == sp:
+                print ('GOT!')
+                gs_arr.append(gs_splitted[6])
+                sp_arr.append(sp_splitted[6])
+                sp += 1
+                n = 1
+                mark += 1
         return n, mark, sp, gs_arr, sp_arr, true, false, accuracy, accuracy_rel
 
     # Different UDpipe scores
@@ -116,13 +112,13 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
     gs = 0
     ud = 0
     sn = 0
-    with open(path + golden_standard_file, 'r', encoding='utf-8') as gs_file:
+    with codecs.open(path + golden_standard_file, 'r', 'utf-8') as gs_file:
         for gs_line in gs_file:
             mark = 0
-            # print ('==NEW GS==')
+            print ('==NEW GS==')
             # Comparison of the golden standard with UDpipe
-            with open(path + udpipe_file,  'r', encoding='utf-8') as ud_file:
-                # print ('UD!')
+            with codecs.open(path + udpipe_file,  'r', 'utf-8') as ud_file:
+                print ('UD!')
                 for ud_line in ud_file:
                     n, mark, ud, \
                     gs_ud_arr, ud_arr, \
@@ -137,8 +133,8 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
                         n = 0
                         break
             # Comparison of the golden standard with SyntaxNet
-            with open(path + syntaxnet_file,  'r', encoding='utf-8') as sn_file:
-                # print ('SN!')
+            with codecs.open(path + syntaxnet_file,  'r', 'utf-8') as sn_file:
+                print ('SN!')
                 for sn_line in sn_file:
                     n, mark, sn, \
                     gs_sn_arr, sn_arr, \
@@ -160,7 +156,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file):
                 ud_arr = []
 
     # Writing down
-    with open('parsers_results.txt', 'w', encoding='utf-8') as w:
+    with codecs.open('parsers_results.txt', 'w', 'utf-8') as w:
         w.write('The number of sentences processed: ' + str(len(ud_accuracy)) + '\n')
         w.write('=== Accuracy for UDpipe ===\n')
         w.write('Accuracy for the whole text: ' + str(float(ud_true) / float(ud_true + ud_false)) + '\n')
