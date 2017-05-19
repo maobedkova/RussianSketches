@@ -64,58 +64,65 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
         accuracy.append(float(rel) / len(gs_arr))
         return true, false, accuracy, accuracy_rel
 
-    def find_equivalent_line(n, mark, sp, gs, sp_line, gs_line, sp_arr, gs_arr, true, false, accuracy, accuracy_rel):
+    def find_equivalent_line(n, mark, sp_line, gs_line, sp_arr, gs_arr, true, false, accuracy, accuracy_rel):
         """The function for finding equivalent lines in the golden standard and in a parser output"""
-        # if not sp < gs:
-        # print (sp_arr)
-        # if (len(sp_line) == 1 or sp_line.startswith('#')) or len(gs_line) == 1:
-        # if len(gs_line) == 1:
-        #     if gs_arr != []:
-        #         true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
-        #                                                     true, false,
-        #                                                     accuracy, accuracy_rel)
-        #         print (true, false, accuracy)
-        #     gs_arr = []
-        #     sp_arr = []
-        #     n = 0
-        #     sp = gs
-        # else:
-        #     gs_splitted = gs_line.strip().split('\t')
-        #     sp_splitted = sp_line.strip().split('\t')
-        #     # print (gs_splitted, sp_splitted, gs, sp)
-        #     if gs_splitted[1] == sp_splitted[1] and gs == sp:
-        #         print ('GOT!', gs_splitted[1], sp_splitted[1], gs, sp)
-        #         gs_arr.append(gs_splitted[6])
-        #         sp_arr.append(sp_splitted[6])
-        #         n = 1
-        #         sp += 1
-        #         mark += 1
-        return n, mark, sp, gs_arr, sp_arr, true, false, accuracy, accuracy_rel
+        gs_splitted = gs_line.strip().split('\t')
+        sp_splitted = sp_line.strip().split('\t')
+        # print (gs_splitted, sp_splitted, gs, sp)
+        if gs_splitted[1] == sp_splitted[1] and gs_splitted[0] == sp_splitted[0]:
+            print ('GOT!', gs_splitted[1], sp_splitted[1])
+            gs_arr.append(gs_splitted[6])
+            sp_arr.append(sp_splitted[6])
+            n = 1
+            mark += 1
+        return n, mark, gs_arr, sp_arr, true, false, accuracy, accuracy_rel
 
-    def iter_file(parser_file, n, mark, prs, gs, gs_line,
+    def writing_check(gs_line, gs_arr, sp_arr, true, false, accuracy, accuracy_rel, mark):
+        if len(gs_line) == 1:
+            if gs_arr != []:
+                true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
+                                                            true, false,
+                                                            accuracy, accuracy_rel)
+                print (true, false, accuracy)
+                gs_arr = []
+                sp_arr = []
+                n = 0
+                return True
+            gs_arr = []
+            sp_arr = []
+            n = 0
+
+    def iter_file(parser_file, n, mark, gs_line,
                   arr, gs_arr, true, false, accuracy, accuracy_rel):
         """The function for iterating a parser file"""
         i = 0
+        if writing_check(gs_line, gs_arr, arr, true, false, accuracy, accuracy_rel, mark):
+            mark += 1
+            return n, mark, gs_arr, arr, true, false, accuracy, accuracy_rel
         for line in parser_file:
-            if not line.startswith('#') or len(line) == 1:
-                print(line)
-                n, mark, prs, \
-                gs_arr, arr, \
-                true, false, \
-                ud_accuracy, accuracy_rel = \
-                    find_equivalent_line(n, mark, prs, gs,
-                                         line, gs_line,
-                                         arr, gs_arr,
-                                         true, false,
-                                         accuracy, accuracy_rel)
+            if not line.startswith('#'):
+                if not len(line) == 1:
+                    print(line)
+                    n, mark, \
+                    gs_arr, arr, \
+                    true, false, \
+                    accuracy, accuracy_rel = \
+                        find_equivalent_line(n, mark,
+                                             line, gs_line,
+                                             arr, gs_arr,
+                                             true, false,
+                                             accuracy, accuracy_rel)
+            if len(gs_line) != 1 and len(line) == 1 and gs_line.split('\t')[0] != '1':
+                arr = []
+                break
             i += 1
-            if i == 60:
+            if i == 100:
                 break
             if n == 1:
                 n = 0
                 break
 
-        return n, mark, prs, gs_arr, arr, true, false, accuracy, accuracy_rel
+        return n, mark, gs_arr, arr, true, false, accuracy, accuracy_rel
 
     # Different UDpipe scores
     ud_true = 0
@@ -149,6 +156,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
     ud = 0
     sn = 0
     rs = 0
+    quit_mark = 0
 
     # Opening parser`s files
     ud_file = open(path + udpipe_file,  'r', encoding='utf-8')
@@ -159,24 +167,30 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
     with open(path + golden_standard_file, 'r', encoding='utf-8') as gs_file:
         for gs_line in gs_file:
             mark = 0
-            print ('==NEW GS==', gs_line, gs, rs, sn, ud)
+            if quit_mark == 1:
+                print ('QUIT')
+                if len(gs_line) == 1:
+                    quit_mark = 0
+                continue
+            print ('==NEW GS==', gs_line)
             # Comparison of the golden standard with UDpipe
             print ('UD!')
-            n, mark, ud, gs_arr, ud_arr, ud_true, ud_false, ud_accuracy, ud_accuracy_rel = \
-                iter_file(ud_file, n, mark, ud, gs, gs_line, ud_arr, gs_ud_arr,
+            n, mark, gs_arr, ud_arr, ud_true, ud_false, ud_accuracy, ud_accuracy_rel = \
+                iter_file(ud_file, n, mark, gs_line, ud_arr, gs_ud_arr,
                           ud_true, ud_false, ud_accuracy, ud_accuracy_rel)
             # Comparison of the golden standard with SyntaxNet
             print ('SN!')
-            n, mark, sn, gs_arr, sn_arr, sn_true, sn_false, sn_accuracy, sn_accuracy_rel = \
-                iter_file(sn_file, n, mark, sn, gs, gs_line, sn_arr, gs_sn_arr,
+            n, mark, gs_arr, sn_arr, sn_true, sn_false, sn_accuracy, sn_accuracy_rel = \
+                iter_file(sn_file, n, mark, gs_line, sn_arr, gs_sn_arr,
                           sn_true, sn_false, sn_accuracy, sn_accuracy_rel)
             # Comparison of the golden standard with RuSyntax
             print ('RS!')
-            n, mark, rs, gs_arr, rs_arr, rs_true, rs_false, rs_accuracy, rs_accuracy_rel = \
-                iter_file(rs_file, n, mark, rs, gs, gs_line, rs_arr, gs_rs_arr,
+            n, mark, gs_arr, rs_arr, rs_true, rs_false, rs_accuracy, rs_accuracy_rel = \
+                iter_file(rs_file, n, mark, gs_line, rs_arr, gs_rs_arr,
                           rs_true, rs_false, rs_accuracy, rs_accuracy_rel)
             if not len(gs_line) == 1:
                 gs += 1
+            print (mark)
             if mark < 3:
                 gs_ud_arr = []
                 gs_sn_arr = []
@@ -184,8 +198,9 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 ud_arr = []
                 sn_arr = []
                 rs_arr = []
+                quit_mark = 1
 
-            if gs == 60:
+            if gs == 100:
                 break
 
     # Writing down the results
