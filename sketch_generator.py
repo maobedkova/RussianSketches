@@ -142,7 +142,6 @@ class RussianSketches:
 
     def lemmatization(self, word, pos, morph=morph):
         """The function for word lemmatization"""
-        # lemma = None
         for i in range(0, len(morph.parse(word))):
             p = morph.parse(word)[i]
             if p.tag.POS in self.pymorphy_dict and self.pymorphy_dict[p.tag.POS] == pos:
