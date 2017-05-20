@@ -6,10 +6,9 @@ output_file = 'raw_text.txt'
 
 golden_standard_file = 'UD-all.conll'
 udpipe_file = 'parsed_udpipe.conll'
-# syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
 rusyntax_file = 'parsed_rusyntax.conll'
 syntaxnet_file = 'changed_syntaxnet.conll'
-
+# syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
 
 def form_dataset(path):
     """The function for writing a raw text from conll dataset"""
@@ -66,7 +65,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
         accuracy.append(float(rel) / len(gs_arr))
         return true, false, accuracy, accuracy_rel
 
-    def find_equivalent_line(w, n, mark, sp_line, gs_line, sp_arr, gs_arr, true, false, accuracy, accuracy_rel):
+    def find_equivalent_line(w, n, sp_line, gs_line, sp_arr, gs_arr, true, false, accuracy, accuracy_rel):
         """The function for finding equivalent lines in the golden standard and in a parser output"""
         gs_splitted = gs_line.strip().split('\t')
         sp_splitted = sp_line.strip().split('\t')
@@ -81,6 +80,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
         return n, mark, gs_arr, sp_arr, true, false, accuracy, accuracy_rel
 
     def flow(parser_file):
+        """The function for skipping not empty lines"""
         for line in parser_file:
             if len(line) == 1:
                 break
@@ -96,7 +96,6 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 arr = []
                 gs_arr = []
                 w.write (str(true) + ' ' + str(false) + ' ' + str(accuracy) + '\n')
-
         for line in parser_file:
             if not line.startswith('#'):
                 if not len(line) == 1:
@@ -110,12 +109,11 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                         gs_arr, arr, \
                         true, false, \
                         accuracy, accuracy_rel = \
-                            find_equivalent_line(w, n, mark,
+                            find_equivalent_line(w, n,
                                                  line, gs_line,
                                                  arr, gs_arr,
                                                  true, false,
                                                  accuracy, accuracy_rel)
-
             if len(line) == 1 and len(gs_line) != 1:
                 if gs_line.split('\t')[0] != '1':
                     arr = []
@@ -152,21 +150,16 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
     sn_arr = []
     rs_arr = []
 
-    n = 0
-    quit_mark = 0
-    i = 0
-    l = 0
-    ls = 0
-
+    # Marking for match
     rs_mark = 0
     sn_mark = 0
     ud_mark = 0
 
-    ud_stop = 0
-    sn_stop = 0
-    rs_stop = 0
+    # Marking for skipping after match
+    n = 0
 
-    stop_mark = 0
+    # Marking for skipping after mismatch
+    quit_mark = 0
 
     # Opening parser`s files
     ud_file = open(path + udpipe_file,  'r', encoding='utf-8')
@@ -181,19 +174,15 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 if quit_mark == 1:
                     if len(gs_line) == 1:
                         if ud_mark == 1:
-                            # w.write('QUIT_UD\n')
                             flow(ud_file)
                         if sn_mark == 1:
-                            # w.write('QUIT_SN\n')
                             flow(sn_file)
                         if rs_mark == 1:
-                            # w.write('QUIT_RS\n')
                             flow(rs_file)
                         quit_mark = 0
                     continue
                 if len(gs_line) == 1:
                     continue
-                l = 0
                 w.write ('==NEW GS==' + gs_line)
                 # Comparison of the golden standard with UDpipe
                 w.write('UD!')
@@ -210,8 +199,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 n, rs_mark, gs_rs_arr, rs_arr, rs_true, rs_false, rs_accuracy, rs_accuracy_rel = \
                     iter_file(w, rs_file, n, rs_mark, gs_line, rs_arr, gs_rs_arr,
                               rs_true, rs_false, rs_accuracy, rs_accuracy_rel)
-                # if some of parsers have different tokenization examples are not considered
-                #
+                # If some of parsers have different tokenization examples are not considered
                 if (ud_mark + sn_mark + rs_mark) < 3:
                     gs_ud_arr = []
                     gs_sn_arr = []
@@ -220,12 +208,8 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                     sn_arr = []
                     rs_arr = []
                     quit_mark = 1
-                # i += 1
-                # if l == 3:
-                #     i += 1
                 if len(ud_accuracy) == 1200:
                     break
-
 
         w.write('The number of sentences processed: ' + str(len(ud_accuracy)) + '\n')
         w.write('=== Accuracy for UDpipe ===\n')
