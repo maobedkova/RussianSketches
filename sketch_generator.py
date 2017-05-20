@@ -1,17 +1,18 @@
 import copy
+import sys
 import pymorphy2
 from association_measures import count_statistics
 
-path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
-input_file = 'sketch_test.conll'
+# input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
 
 morph = pymorphy2.MorphAnalyzer()
 
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-    def __init__(self, noun='NOUN', adj='ADJ', verb='VERB', adv='ADV', praed=None, adp='ADP'):
+    def __init__(self, input_file, noun='NOUN', adj='ADJ', verb='VERB', adv='ADV', praed=None, adp='ADP'):
         """Attrbutes of the RussianSketches class"""
+        self.input_file = input_file
         self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
         self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
@@ -38,7 +39,7 @@ class RussianSketches:
 
     def reading_conll(self):
         """The function for reading conll files"""
-        with open(path + input_file, 'r', encoding='utf-8') as f:
+        with open(self.input_file, 'r', encoding='utf-8') as f:
             infos = []
             for line in f:
                 if len(line) == 1:
@@ -150,7 +151,7 @@ class RussianSketches:
                 lemma = morph.parse(word)[0].normal_form
         return lemma
 
-    def retrieve_candidates(self, path):
+    def retrieve_candidates(self):
         """The function for retrieving candidates for sketches"""
         print ('=== Retrieving candidates ===')
         for infos in self.reading_conll():
@@ -329,6 +330,7 @@ class SketchEntry:
 
 """The main function which calling the RussianSketches class"""
 if __name__ == '__main__':
-    rs = RussianSketches()
-    rs.retrieve_candidates(path)
+    input_file = sys.argv[1]
+    rs = RussianSketches(input_file)
+    rs.retrieve_candidates()
     rs.count_association_measure()
