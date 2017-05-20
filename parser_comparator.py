@@ -6,8 +6,10 @@ output_file = 'raw_text.txt'
 
 golden_standard_file = 'UD-all.conll'
 udpipe_file = 'parsed_udpipe.conll'
-syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
+# syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
 rusyntax_file = 'parsed_rusyntax.conll'
+syntaxnet_file = 'changed_syntaxnet.conll'
+
 
 def form_dataset(path):
     """The function for writing a raw text from conll dataset"""
@@ -78,15 +80,6 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
             mark = 0
         return n, mark, gs_arr, sp_arr, true, false, accuracy, accuracy_rel
 
-    def writing_check(w, gs_line, gs_arr, sp_arr, true, false, accuracy, accuracy_rel):
-        if gs_line.split('\t')[0] == '1':
-            if gs_arr != []:
-                true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, sp_arr,
-                                                            true, false,
-                                                            accuracy, accuracy_rel)
-                w.write (str(true) + ' ' + str(false) + ' ' + str(accuracy) + '\n')
-                return True
-
     def flow(parser_file):
         for line in parser_file:
             if len(line) == 1:
@@ -95,22 +88,33 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
     def iter_file(w, parser_file, n, mark, gs_line,
                   arr, gs_arr, true, false, accuracy, accuracy_rel):
         """The function for iterating a parser file"""
-        if writing_check(w, gs_line, gs_arr, arr, true, false, accuracy, accuracy_rel):
-            arr = []
-            gs_arr = []
+        if gs_line.split('\t')[0] == '1':
+            if gs_arr != []:
+                true, false, accuracy, accuracy_rel = count_accuracy(gs_arr, arr,
+                                                                     true, false,
+                                                                     accuracy, accuracy_rel)
+                arr = []
+                gs_arr = []
+                w.write (str(true) + ' ' + str(false) + ' ' + str(accuracy) + '\n')
+
         for line in parser_file:
             if not line.startswith('#'):
                 if not len(line) == 1:
-                    w.write(line)
-                    n, mark,\
-                    gs_arr, arr, \
-                    true, false, \
-                    accuracy, accuracy_rel = \
-                        find_equivalent_line(w, n, mark,
-                                             line, gs_line,
-                                             arr, gs_arr,
-                                             true, false,
-                                             accuracy, accuracy_rel)
+                    if gs_line.split('\t')[0] == '1' and gs_line.split('\t')[1] != line.split('\t')[1]:
+                        n = 1
+                        mark = 0
+                        continue
+                    else:
+                        w.write(line)
+                        n, mark,\
+                        gs_arr, arr, \
+                        true, false, \
+                        accuracy, accuracy_rel = \
+                            find_equivalent_line(w, n, mark,
+                                                 line, gs_line,
+                                                 arr, gs_arr,
+                                                 true, false,
+                                                 accuracy, accuracy_rel)
 
             if len(line) == 1 and len(gs_line) != 1:
                 if gs_line.split('\t')[0] != '1':
@@ -151,10 +155,18 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
     n = 0
     quit_mark = 0
     i = 0
+    l = 0
+    ls = 0
 
     rs_mark = 0
     sn_mark = 0
     ud_mark = 0
+
+    ud_stop = 0
+    sn_stop = 0
+    rs_stop = 0
+
+    stop_mark = 0
 
     # Opening parser`s files
     ud_file = open(path + udpipe_file,  'r', encoding='utf-8')
@@ -169,18 +181,22 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 if quit_mark == 1:
                     if len(gs_line) == 1:
                         if ud_mark == 1:
+                            # w.write('QUIT_UD\n')
                             flow(ud_file)
                         if sn_mark == 1:
+                            # w.write('QUIT_SN\n')
                             flow(sn_file)
                         if rs_mark == 1:
+                            # w.write('QUIT_RS\n')
                             flow(rs_file)
                         quit_mark = 0
                     continue
                 if len(gs_line) == 1:
                     continue
+                l = 0
                 w.write ('==NEW GS==' + gs_line)
                 # Comparison of the golden standard with UDpipe
-                w.write ('UD!')
+                w.write('UD!')
                 n, ud_mark, gs_ud_arr, ud_arr, ud_true, ud_false, ud_accuracy, ud_accuracy_rel = \
                     iter_file(w, ud_file, n, ud_mark, gs_line, ud_arr, gs_ud_arr,
                               ud_true, ud_false, ud_accuracy, ud_accuracy_rel)
@@ -204,8 +220,10 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                     sn_arr = []
                     rs_arr = []
                     quit_mark = 1
-                i += 1
-                if i == 500:
+                # i += 1
+                # if l == 3:
+                #     i += 1
+                if len(ud_accuracy) == 1200:
                     break
 
 
@@ -217,7 +235,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
         w.write('=== Accuracy for SyntaxNet ===\n')
         w.write('Accuracy for the whole text: ' + str(float(sn_true) / float(sn_true + sn_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(sn_accuracy)) + '\n')
-        w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(sn_accuracy_rel)) + '\n')
+        w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(sn_accuracy_rel)) + '\n\n')
         w.write('=== Accuracy for RuSyntax ===\n')
         w.write('Accuracy for the whole text: ' + str(float(rs_true) / float(rs_true + rs_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(rs_accuracy)) + '\n')
