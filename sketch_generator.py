@@ -44,6 +44,16 @@ class RussianSketches:
                               'VERB': verb,
                               'NOUN': noun}    # dictionary of pymorphy tags and their equivalents
 
+    def lemmatization(self, word, pos, morph=morph):
+        """The function for word lemmatization"""
+        for i in range(0, len(morph.parse(word))):
+            p = morph.parse(word)[i]
+            if p.tag.POS in self.pymorphy_dict and self.pymorphy_dict[p.tag.POS] == pos:
+                lemma = p.normal_form
+            else:
+                lemma = morph.parse(word)[0].normal_form
+        return lemma
+
     def reading_conll(self):
         """The function for reading conll files"""
         with open(self.input_file, 'r', encoding='utf-8') as f:
@@ -57,8 +67,12 @@ class RussianSketches:
                     infos = []
                     continue
                 splitted = line.strip().split('\t')
+                if splitted[2] == '_':
+                    lemma = self.lemmatization(splitted[1], splitted[3])
+                else:
+                    lemma = splitted[2]
                 infos.append([splitted[0],  # number of a wordform
-                              splitted[1],  # wordform
+                              lemma,        # lemma
                               splitted[3],  # part of speech
                               splitted[6],  # head word
                               splitted[7]]) # type of a linkage
@@ -152,16 +166,6 @@ class RussianSketches:
                 if third_word not in tmp_dict:
                     create_entry(third_word)
 
-    def lemmatization(self, word, pos, morph=morph):
-        """The function for word lemmatization"""
-        for i in range(0, len(morph.parse(word))):
-            p = morph.parse(word)[i]
-            if p.tag.POS in self.pymorphy_dict and self.pymorphy_dict[p.tag.POS] == pos:
-                lemma = p.normal_form
-            else:
-                lemma = morph.parse(word)[0].normal_form
-        return lemma
-
     def retrieve_candidates(self):
         """The function for retrieving candidates for sketches"""
 
@@ -171,11 +175,11 @@ class RussianSketches:
                 self.trigram_corpus_size += 1
                 self.add_sketch_entry(
                     info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
-                    self.lemmatization(info_1[1], info_1[2]),       # first word
+                    info_1[1],                                      # first word
                     info_1[2],                                      # part of speech of a first word
-                    self.lemmatization(info_2[1], info_2[2]),       # second word
+                    info_2[1],                                      # second word
                     info_2[2],                                      # part of speech of a second word
-                    self.lemmatization(info_3[1], info_3[2]),       # third word
+                    info_3[1],                                      # third word
                     info_3[2]                                       # part of speech of a third word
                 )
                 bigram_allowed = False
@@ -204,11 +208,11 @@ class RussianSketches:
                         if info_1[0] == info_2[3]:
                             self.bigram_corpus_size += 1
                             self.add_sketch_entry(
-                                info_2[4],                                  # type of a linkage
-                                self.lemmatization(info_1[1], info_1[2]),   # first word
-                                info_1[2],                                  # part of speech of a first word
-                                self.lemmatization(info_2[1], info_2[2]),   # second word
-                                info_2[2]                                   # part of speech of a second word
+                                info_2[4],  # type of a linkage
+                                info_1[1],  # first word
+                                info_1[2],  # part of speech of a first word
+                                info_2[1],  # second word
+                                info_2[2]   # part of speech of a second word
                             )
 
     def filtering(self):
@@ -403,4 +407,4 @@ if __name__ == '__main__':
     rs.count_association_measures()
     rs.filtering()
     rs.show_results()
-    # rs.writing_down_results()
+    rs.writing_down_results()
