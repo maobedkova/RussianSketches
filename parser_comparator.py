@@ -1,16 +1,17 @@
 import numpy
 
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'
-input_file = 'UD-all.conll'
-output_file = 'raw_text.txt'
+
+conll_text = 'UD-all.conll'
+txt_text = 'raw_text.txt'
 
 golden_standard_file = 'UD-all.conll'
 udpipe_file = 'parsed_udpipe.conll'
 rusyntax_file = 'parsed_rusyntax.conll'
 syntaxnet_file = 'changed_syntaxnet.conll'
-# syntaxnet_file = 'parsed_syntaxnet_tiny.conll'
+# syntaxnet_file = 'parsed_syntaxnet.conll'
 
-def form_dataset(path):
+def form_dataset(input_file, output_file, path=path):
     """The function for writing a raw text from conll dataset"""
     print ('=== Text formation ===')
     with open(path + input_file, 'r', encoding='utf-8') as f:
@@ -45,6 +46,32 @@ def form_dataset(path):
                         else:
                             w.write(' ' + splitted[1])
 
+def syntaxnet_debugger(input_file, output_file, path=path):
+    """The function for debugging improper splitting for SyntaxNet"""
+    f = open(path + input_file, 'r', encoding='utf-8')
+    with open(path + output_file, 'w', encoding='utf-8') as w:
+        mem_line = ''
+        mark = 0
+        for line in f:
+            if len(line) == 1:
+                mark += 1
+                if mark > 3:
+                    mem_line = ''
+                    mark = 1
+                else:
+                    w.write(line)
+            else:
+                if line.split('\t')[0] == '1':
+                    mark += 1
+                    mem_line = line
+                else:
+                    if mark == 1 or mark == 2:
+                        mark = 0
+                        w.write(mem_line)
+                        w.write(line)
+                    elif mark == 0:
+                        w.write(line)
+
 def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_file):
     '''The function for comparing different syntactic parsers'''
 
@@ -57,11 +84,11 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 true += 1
                 rel += 1
                 rel_head += 1
-                if gs_arr[i] == 0 and sp_arr[i] == 0:
+                if gs_arr[i] == '0' and sp_arr[i] == '0':
                     rel_head += 1
             else:
                 false += 1
-        accuracy_rel.append(float(rel_head) / len(gs_arr))
+        accuracy_rel.append(float(rel_head) / (len(gs_arr) + 1))
         accuracy.append(float(rel) / len(gs_arr))
         return true, false, accuracy, accuracy_rel
 
@@ -211,20 +238,22 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
                 if len(ud_accuracy) == 1200:
                     break
 
-        w.write('The number of sentences processed: ' + str(len(ud_accuracy)) + '\n')
+        w.write('\nThe number of sentences processed: ' + str(len(ud_accuracy)) + '\n\n')
+
         w.write('=== Accuracy for UDpipe ===\n')
         w.write('Accuracy for the whole text: ' + str(float(ud_true) / float(ud_true + ud_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(ud_accuracy)) + '\n')
         w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(ud_accuracy_rel)) + '\n\n')
+
         w.write('=== Accuracy for SyntaxNet ===\n')
         w.write('Accuracy for the whole text: ' + str(float(sn_true) / float(sn_true + sn_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(sn_accuracy)) + '\n')
         w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(sn_accuracy_rel)) + '\n\n')
+
         w.write('=== Accuracy for RuSyntax ===\n')
         w.write('Accuracy for the whole text: ' + str(float(rs_true) / float(rs_true + rs_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(rs_accuracy)) + '\n')
         w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(rs_accuracy_rel)) + '\n')
 
 if __name__ == '__main__':
-    # form_dataset(path)
     compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_file)
