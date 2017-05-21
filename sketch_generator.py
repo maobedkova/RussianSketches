@@ -10,13 +10,14 @@ morph = pymorphy2.MorphAnalyzer()
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-    def __init__(self, input_file, noun, adj, verb, adv, adp, praed, punct):
+    def __init__(self, input_file, noun, adj, verb, adv, adp, praed, punct, adp_mark=False):
         """Attrbutes of the RussianSketches class"""
         self.input_file = input_file
         self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
         self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
         self.trigram_corpus_size = 0    # number of trigrams in a corpus
+        self.adp_mark = adp_mark        # if False noun is dependent of adposition; if True adposition is dependent of noun
         self.adp = adp                  # tag for adposition
         self.punct = punct              # tag for punctuation marks
         self.possible_bigrams = {
@@ -155,6 +156,23 @@ class RussianSketches:
 
     def retrieve_candidates(self):
         """The function for retrieving candidates for sketches"""
+
+        def add_trigram(head, bigram_allowed):
+            """The function for adding trigrams"""
+            if head[2] == self.adp or head[1] == 'и':
+                self.trigram_corpus_size += 1
+                self.add_sketch_entry(
+                    info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
+                    self.lemmatization(info_1[1], info_1[2]),       # first word
+                    info_1[2],                                      # part of speech of a first word
+                    self.lemmatization(info_2[1], info_2[2]),       # second word
+                    info_2[2],                                      # part of speech of a second word
+                    self.lemmatization(info_3[1], info_3[2]),       # third word
+                    info_3[2]                                       # part of speech of a third word
+                )
+                bigram_allowed = False
+            return bigram_allowed
+
         print ('=== Retrieving candidates ===')
         for infos in self.reading_conll():
             for info_1 in infos:
@@ -169,18 +187,10 @@ class RussianSketches:
                         if info_3[2] == self.punct:
                             continue
                         if info_1[0] == info_2[3] and info_2[0] == info_3[3]:
-                            if (info_3[2] == self.adp or info_2[1] == 'и'):
-                                self.trigram_corpus_size += 1
-                                self.add_sketch_entry(
-                                    info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
-                                    self.lemmatization(info_1[1], info_1[2]),       # first word
-                                    info_1[2],                                      # part of speech of a first word
-                                    self.lemmatization(info_2[1], info_2[2]),       # second word
-                                    info_2[2],                                      # part of speech of a second word
-                                    self.lemmatization(info_3[1], info_3[2]),       # third word
-                                    info_3[2]                                       # part of speech of a third word
-                                )
-                                bigram_allowed = False
+                            if self.adp_mark:
+                                bigram_allowed = add_trigram(info_3, bigram_allowed)
+                            else:
+                                bigram_allowed = add_trigram(info_2, bigram_allowed)
                     # Retrieving bigram candidates
                     if bigram_allowed:
                         if info_1[0] == info_2[3]:
@@ -379,8 +389,8 @@ if __name__ == '__main__':
         input_file = sys.argv[1]
     except:
         input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
-    # rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT') # RuSyntax, SynTagRus
-    rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT') # SyntaxNet
+    rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT') # RuSyntax, SynTagRus
+    # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
