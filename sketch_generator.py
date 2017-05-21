@@ -48,7 +48,10 @@ class RussianSketches:
         """The function for reading conll files"""
         with open(self.input_file, 'r', encoding='utf-8') as f:
             infos = []
+            i = 0
             for line in f:
+                if i % 1000 == 0:
+                    print (i)
                 if len(line) == 1:
                     yield infos
                     infos = []
@@ -59,6 +62,7 @@ class RussianSketches:
                               splitted[3],  # part of speech
                               splitted[6],  # head word
                               splitted[7]]) # type of a linkage
+                i += 1
 
     def add_sketch_entry(self, linkage,
                          first_word, first_word_pos,
