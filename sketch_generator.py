@@ -1,6 +1,8 @@
 import copy
-import sys
+import os
+import pickle
 import pymorphy2
+import sys
 from association_measures import count_statistics
 
 morph = pymorphy2.MorphAnalyzer()
@@ -247,11 +249,12 @@ class RussianSketches:
         count_statistics(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
 
     def show_results(self):
-        """The function for showing results"""
+        """The function for showing the results"""
+        print ('=== Results ===')
         print (self.filtered_candidates)
         for word in self.filtered_candidates:
             print ('WORD', word)
-            for link in  self.filtered_candidates[word]:
+            for link in self.filtered_candidates[word]:
                 print ('LINKAGE', link)
                 for obj in self.filtered_candidates[word][link]:
                     print (obj.first_word,
@@ -272,6 +275,24 @@ class RussianSketches:
                            obj.jaccard,
                            obj.fisher)
             print ('='*30)
+
+    def writing_down_results(self):
+        """The function for writing down the results in .json"""
+        print ('=== Writing down the results ===')
+
+        def create_files(arr):
+            """The function for creating sketch files in a sketch directory"""
+            for word in arr:
+                sketches = open('sketches/' + word + '.pkl', 'wb')
+                pickle.dump(arr[word], sketches, pickle.HIGHEST_PROTOCOL)
+                sketches.close()
+
+        if not os.path.exists('sketches'):
+            os.mkdir('sketches')
+        if self.filtered_candidates:
+            create_files(self.filtered_candidates)
+        else:
+            create_files(self.candidates)
 
 
 class SketchEntry:
@@ -331,3 +352,4 @@ if __name__ == '__main__':
     rs.count_association_measures()
     rs.filtering()
     rs.show_results()
+    rs.writing_down_results()
