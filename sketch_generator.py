@@ -17,6 +17,7 @@ class RussianSketches:
         self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
         self.trigram_corpus_size = 0    # number of trigrams in a corpus
+        self.adp = adp                  # tag for adposition
         self.possible_bigrams = {
             noun: [adj, adv, verb, noun],
             adj: [adv, noun],
@@ -157,28 +158,32 @@ class RussianSketches:
         for infos in self.reading_conll():
             for info_1 in infos:
                 for info_2 in infos:
-                    # Retrieving bigram candidates
-                    if info_1[0] == info_2[3]:
-                        self.bigram_corpus_size += 1
-                        self.add_sketch_entry(
-                            info_2[4],                                  # type of a linkage
-                            self.lemmatization(info_1[1], info_1[2]),   # first word
-                            info_1[2],                                  # part of speech of a first word
-                            self.lemmatization(info_2[1], info_2[2]),   # second word
-                            info_2[2]                                   # part of speech of a second word
-                        )
+                    bigram_allowed = True
                     # Retrieving trigram candidates
                     for info_3 in infos:
                         if info_1[0] == info_2[3] and info_2[0] == info_3[3]:
-                            self.trigram_corpus_size += 1
+                            if info_3[2] == self.adp:
+                                self.trigram_corpus_size += 1
+                                self.add_sketch_entry(
+                                    info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
+                                    self.lemmatization(info_1[1], info_1[2]),       # first word
+                                    info_1[2],                                      # part of speech of a first word
+                                    self.lemmatization(info_2[1], info_2[2]),       # second word
+                                    info_2[2],                                      # part of speech of a second word
+                                    self.lemmatization(info_3[1], info_3[2]),       # third word
+                                    info_3[2]                                       # part of speech of a third word
+                                )
+                                bigram_allowed = False
+                    # Retrieving bigram candidates
+                    if bigram_allowed:
+                        if info_1[0] == info_2[3]:
+                            self.bigram_corpus_size += 1
                             self.add_sketch_entry(
-                                info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
-                                self.lemmatization(info_1[1], info_1[2]),       # first word
-                                info_1[2],                                      # part of speech of a first word
-                                self.lemmatization(info_2[1], info_2[2]),       # second word
-                                info_2[2],                                      # part of speech of a second word
-                                self.lemmatization(info_3[1], info_3[2]),       # third word
-                                info_3[2]                                       # part of speech of a third word
+                                info_2[4],  # type of a linkage
+                                self.lemmatization(info_1[1], info_1[2]),  # first word
+                                info_1[2],  # part of speech of a first word
+                                self.lemmatization(info_2[1], info_2[2]),  # second word
+                                info_2[2]  # part of speech of a second word
                             )
 
     def filtering(self):
