@@ -29,7 +29,7 @@ class RussianSketches:
         self.possible_trigrams = {
             noun: {adp: [noun, verb]},
             adj: {adp: [noun]},
-            verb: {adp: [noun], noun: [adp]},
+            verb: {adp: [noun]},
             praed: {adp: [noun]}
         }                               # dictionary of part of speeches that are allowed for trigrams
         self.pymorphy_dict = {'ADJF': adj,
@@ -169,7 +169,7 @@ class RussianSketches:
                         if info_3[2] == self.punct:
                             continue
                         if info_1[0] == info_2[3] and info_2[0] == info_3[3]:
-                            if info_2[2] == self.adp or info_2[1] == 'и':
+                            if (info_3[2] == self.adp or info_2[1] == 'и'):
                                 self.trigram_corpus_size += 1
                                 self.add_sketch_entry(
                                     info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
@@ -379,7 +379,8 @@ if __name__ == '__main__':
         input_file = sys.argv[1]
     except:
         input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
-    rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT')
+    # rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT') # RuSyntax, SynTagRus
+    rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT') # SyntaxNet
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
