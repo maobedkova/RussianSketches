@@ -10,7 +10,7 @@ morph = pymorphy2.MorphAnalyzer()
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-    def __init__(self, input_file, noun='NOUN', adj='ADJ', verb='VERB', adv='ADV', praed=None, adp='ADP'):
+    def __init__(self, input_file, noun, adj, verb, adv, adp, praed, punct):
         """Attrbutes of the RussianSketches class"""
         self.input_file = input_file
         self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
@@ -18,6 +18,7 @@ class RussianSketches:
         self.bigram_corpus_size = 0     # number of bigrams in a corpus
         self.trigram_corpus_size = 0    # number of trigrams in a corpus
         self.adp = adp                  # tag for adposition
+        self.punct = punct              # tag for punctuation marks
         self.possible_bigrams = {
             noun: [adj, adv, verb, noun],
             adj: [adv, noun],
@@ -28,7 +29,7 @@ class RussianSketches:
         self.possible_trigrams = {
             noun: {adp: [noun, verb]},
             adj: {adp: [noun]},
-            verb: {adp: [noun]},
+            verb: {adp: [noun], noun: [adp]},
             praed: {adp: [noun]}
         }                               # dictionary of part of speeches that are allowed for trigrams
         self.pymorphy_dict = {'ADJF': adj,
@@ -157,12 +158,18 @@ class RussianSketches:
         print ('=== Retrieving candidates ===')
         for infos in self.reading_conll():
             for info_1 in infos:
+                if info_1[2] == self.punct:
+                    continue
                 for info_2 in infos:
+                    if info_2[2] == self.punct:
+                        continue
                     bigram_allowed = True
                     # Retrieving trigram candidates
                     for info_3 in infos:
+                        if info_3[2] == self.punct:
+                            continue
                         if info_1[0] == info_2[3] and info_2[0] == info_3[3]:
-                            if info_3[2] == self.adp:
+                            if info_2[2] == self.adp or info_2[1] == 'и':
                                 self.trigram_corpus_size += 1
                                 self.add_sketch_entry(
                                     info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
@@ -179,11 +186,11 @@ class RussianSketches:
                         if info_1[0] == info_2[3]:
                             self.bigram_corpus_size += 1
                             self.add_sketch_entry(
-                                info_2[4],  # type of a linkage
-                                self.lemmatization(info_1[1], info_1[2]),  # first word
-                                info_1[2],  # part of speech of a first word
-                                self.lemmatization(info_2[1], info_2[2]),  # second word
-                                info_2[2]  # part of speech of a second word
+                                info_2[4],                                  # type of a linkage
+                                self.lemmatization(info_1[1], info_1[2]),   # first word
+                                info_1[2],                                  # part of speech of a first word
+                                self.lemmatization(info_2[1], info_2[2]),   # second word
+                                info_2[2]                                   # part of speech of a second word
                             )
 
     def filtering(self):
@@ -200,7 +207,7 @@ class RussianSketches:
             else:
                 dict[word] = {linkage: arr}  # add word + linkage + candidates
 
-        def filter_check_trigrams(pos1, pos2, pos3):
+        def filter_check_trigrams(word, pos1, pos2, pos3, obj, linkage):
             """The function for checking the presence in the dictionary"""
             if pos1 in self.possible_trigrams \
                     and pos2 in self.possible_trigrams[pos1] \
@@ -208,31 +215,43 @@ class RussianSketches:
                 create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
                 return True
 
-        def filter_check_conj(word, pos2, pos3):
+        def filter_check_conj(word, word2, pos2, pos3, obj, linkage):
             """The function for checking the presence of the conjunction и"""
             if word == 'и' and pos2 == pos3:
-                create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                create_candidates_dict(self.filtered_candidates, word2, linkage, [obj])
                 return True
 
-        def filter_pos(obj, word, linkage):
+        def filter_pos(word, obj, linkage):
             """The function for filtering linkages by a given part of speech"""
             # Filtering trigrams
             if obj.third_word:
                 if word == obj.first_word:
-                    if not filter_check_conj(obj.second_word, obj.first_word_pos, obj.third_word_pos):
-                        if not filter_check_conj(obj.third_word, obj.first_word_pos, obj.second_word_pos):
-                            if not filter_check_trigrams(obj.first_word_pos, obj.second_word_pos, obj.third_word_pos):
-                                filter_check_trigrams(obj.first_word_pos, obj.third_word_pos, obj.second_word_pos)
+                    if not filter_check_conj(obj.second_word, obj.first_word,
+                                             obj.first_word_pos, obj.third_word_pos, obj, linkage):
+                        if not filter_check_conj(obj.third_word, obj.first_word,
+                                                 obj.first_word_pos, obj.second_word_pos, obj, linkage):
+                            if not filter_check_trigrams(word, obj.first_word_pos, obj.second_word_pos,
+                                                         obj.third_word_pos, obj, linkage):
+                                filter_check_trigrams(word, obj.first_word_pos, obj.third_word_pos,
+                                                      obj.second_word_pos, obj, linkage)
                 elif word == obj.second_word:
-                    if not filter_check_conj(obj.first_word, obj.second_word_pos, obj.third_word_pos):
-                        if not filter_check_conj(obj.third_word, obj.first_word_pos, obj.second_word_pos):
-                            if not filter_check_trigrams(obj.second_word_pos, obj.first_word_pos, obj.third_word_pos):
-                                filter_check_trigrams(obj.second_word_pos, obj.third_word_pos, obj.first_word_pos)
+                    if not filter_check_conj(obj.first_word, obj.second_word,
+                                             obj.second_word_pos, obj.third_word_pos, obj, linkage):
+                        if not filter_check_conj(obj.third_word, obj.second_word,
+                                                 obj.first_word_pos, obj.second_word_pos, obj, linkage):
+                            if not filter_check_trigrams(word, obj.second_word_pos, obj.first_word_pos,
+                                                         obj.third_word_pos, obj, linkage):
+                                filter_check_trigrams(word, obj.second_word_pos, obj.third_word_pos,
+                                                      obj.first_word_pos, obj, linkage)
                 else:
-                    if not filter_check_conj(obj.second_word, obj.first_word_pos, obj.third_word_pos):
-                        if not filter_check_conj(obj.first_word, obj.third_word_pos, obj.second_word_pos):
-                            if not filter_check_trigrams(obj.third_word_pos, obj.second_word_pos, obj.first_word_pos):
-                                filter_check_trigrams(obj.third_word_pos, obj.first_word_pos, obj.second_word_pos)
+                    if not filter_check_conj(obj.second_word, obj.third_word,
+                                             obj.first_word_pos, obj.third_word_pos, obj, linkage):
+                        if not filter_check_conj(obj.first_word, obj.third_word,
+                                                 obj.third_word_pos, obj.second_word_pos, obj, linkage):
+                            if not filter_check_trigrams(word, obj.third_word_pos, obj.second_word_pos,
+                                                         obj.first_word_pos, obj, linkage):
+                                filter_check_trigrams(word, obj.third_word_pos, obj.first_word_pos,
+                                                      obj.second_word_pos, obj, linkage)
             # Filtering bigrams
             else:
                 if word == obj.first_word:
@@ -247,7 +266,7 @@ class RussianSketches:
         for word in self.candidates:
             for linkage in self.candidates[word]:
                 for obj in self.candidates[word][linkage]:
-                    filter_pos(obj, word, linkage)
+                    filter_pos(word, obj, linkage)
 
     def count_association_measures(self):
         """The function for counting a chosen association measure"""
@@ -255,31 +274,39 @@ class RussianSketches:
 
     def show_results(self):
         """The function for showing the results"""
+
+        def print_sketches(arr):
+            """The function for printing out sketches"""
+            print (arr)
+            for word in arr:
+                print ('WORD', word)
+                for link in arr[word]:
+                    print ('LINKAGE', link)
+                    for obj in arr[word][link]:
+                        print (obj.first_word,
+                               obj.first_word_pos,
+                               obj.second_word,
+                               obj.second_word_pos,
+                               obj.third_word,
+                               obj.third_word_pos,
+                               obj.linkage,
+                               obj.abs_freq,
+                               obj.dice,
+                               obj.chi,
+                               obj.t_score,
+                               obj.poisson_stirling,
+                               obj.pmi,
+                               obj.mi,
+                               obj.likelihood_ratio,
+                               obj.jaccard,
+                               obj.fisher)
+                print ('='*30)
+
         print ('=== Results ===')
-        print (self.filtered_candidates)
-        for word in self.filtered_candidates:
-            print ('WORD', word)
-            for link in self.filtered_candidates[word]:
-                print ('LINKAGE', link)
-                for obj in self.filtered_candidates[word][link]:
-                    print (obj.first_word,
-                           obj.first_word_pos,
-                           obj.second_word,
-                           obj.second_word_pos,
-                           obj.third_word,
-                           obj.third_word_pos,
-                           obj.linkage,
-                           obj.abs_freq,
-                           obj.dice,
-                           obj.chi,
-                           obj.t_score,
-                           obj.poisson_stirling,
-                           obj.pmi,
-                           obj.mi,
-                           obj.likelihood_ratio,
-                           obj.jaccard,
-                           obj.fisher)
-            print ('='*30)
+        if self.filtered_candidates:
+            print_sketches(self.filtered_candidates)
+        else:
+            print_sketches(self.candidates)
 
     def writing_down_results(self):
         """The function for writing down the results in .json"""
@@ -352,9 +379,9 @@ if __name__ == '__main__':
         input_file = sys.argv[1]
     except:
         input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
-    rs = RussianSketches(input_file)
+    rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT')
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
     rs.show_results()
-    rs.writing_down_results()
+    # rs.writing_down_results()
