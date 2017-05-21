@@ -11,6 +11,7 @@ rusyntax_file = 'parsed_rusyntax.conll'
 syntaxnet_file = 'changed_syntaxnet.conll'
 # syntaxnet_file = 'parsed_syntaxnet.conll'
 
+
 def form_dataset(input_file, output_file, path=path):
     """The function for writing a raw text from conll dataset"""
     print ('=== Text formation ===')
@@ -46,6 +47,7 @@ def form_dataset(input_file, output_file, path=path):
                         else:
                             w.write(' ' + splitted[1])
 
+
 def syntaxnet_debugger(input_file, output_file, path=path):
     """The function for debugging improper splitting for SyntaxNet"""
     f = open(path + input_file, 'r', encoding='utf-8')
@@ -71,6 +73,7 @@ def syntaxnet_debugger(input_file, output_file, path=path):
                         w.write(line)
                     elif mark == 0:
                         w.write(line)
+
 
 def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_file):
     '''The function for comparing different syntactic parsers'''
@@ -254,6 +257,7 @@ def compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_
         w.write('Accuracy for the whole text: ' + str(float(rs_true) / float(rs_true + rs_false)) + '\n')
         w.write('Mean accuracy for every sentence: ' + str(numpy.mean(rs_accuracy)) + '\n')
         w.write('Mean accuracy for every sentence with higher weight for root: ' + str(numpy.mean(rs_accuracy_rel)) + '\n')
+
 
 if __name__ == '__main__':
     compare_parsers(golden_standard_file, udpipe_file, syntaxnet_file, rusyntax_file)
