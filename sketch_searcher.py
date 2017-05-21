@@ -15,7 +15,6 @@ def get_sketches_by_word(word):
             print ('FILENAME', filename)
             with open('sketches/' + filename, 'rb') as sk:
                 sketch = pickle.load(sk)
-                # Ranging sketches for a word
                 for linkage in sketch:
                     print ('LINKAGE', linkage)
                     for obj in sorted(sketch[linkage], reverse=True)[:10]:
