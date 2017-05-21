@@ -1,3 +1,7 @@
+# coding: utf-8
+
+__author__ = "maobedkova"
+
 import copy
 import os
 import pickle
@@ -149,7 +153,7 @@ class RussianSketches:
         for i in range(0, len(morph.parse(word))):
             p = morph.parse(word)[i]
             if p.tag.POS in self.pymorphy_dict and self.pymorphy_dict[p.tag.POS] == pos:
-                    lemma = p.normal_form
+                lemma = p.normal_form
             else:
                 lemma = morph.parse(word)[0].normal_form
         return lemma
