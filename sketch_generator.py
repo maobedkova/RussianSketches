@@ -3,8 +3,6 @@ import sys
 import pymorphy2
 from association_measures import count_statistics
 
-# input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
-
 morph = pymorphy2.MorphAnalyzer()
 
 class RussianSketches:
@@ -181,34 +179,32 @@ class RussianSketches:
                                 info_3[2]                                       # part of speech of a third word
                             )
 
-    def create_candidates_dict(self, dict, word, linkage, arr):
-        """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
-        if word in dict:
-            if linkage in dict[word]:
-                dict[word][linkage] += arr  # add candidates
-            else:
-                dict[word][linkage] = arr   # add linkage + candidates
-        else:
-            dict[word] = {linkage: arr}     # add word + linkage + candidates
-
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
-
         print ('=== Filtering candidates ===')
+
+        def create_candidates_dict(dict, word, linkage, arr):
+            """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
+            if word in dict:
+                if linkage in dict[word]:
+                    dict[word][linkage] += arr  # add candidates
+                else:
+                    dict[word][linkage] = arr  # add linkage + candidates
+            else:
+                dict[word] = {linkage: arr}  # add word + linkage + candidates
 
         def filter_check_trigrams(pos1, pos2, pos3):
             """The function for checking the presence in the dictionary"""
             if pos1 in self.possible_trigrams \
                     and pos2 in self.possible_trigrams[pos1] \
                     and pos3 in self.possible_trigrams[pos1][pos2]:
-                self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
                 return True
 
         def filter_check_conj(word, pos2, pos3):
             """The function for checking the presence of the conjunction и"""
             if word == 'и' and pos2 == pos3:
-                print ('И', obj.first_word, obj.second_word, obj.third_word)
-                self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
                 return True
 
         def filter_pos(obj, word, linkage):
@@ -235,27 +231,23 @@ class RussianSketches:
                 if word == obj.first_word:
                     if obj.first_word_pos in self.possible_bigrams \
                             and obj.second_word_pos in self.possible_bigrams[obj.first_word_pos]:
-                        self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                        create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
                 else:
                     if obj.second_word_pos in self.possible_bigrams \
                             and obj.first_word_pos in self.possible_bigrams[obj.second_word_pos]:
-                        self.create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
+                        create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
 
         for word in self.candidates:
             for linkage in self.candidates[word]:
                 for obj in self.candidates[word][linkage]:
                     filter_pos(obj, word, linkage)
 
-    def count_association_measure(self):
+    def count_association_measures(self):
         """The function for counting a chosen association measure"""
         count_statistics(self.candidates, self.bigram_corpus_size, self.trigram_corpus_size)
-        # # Ranging candidates and saving the ranged candidates as an attribute
-        # print ('=== Ranging candidates ===')
-        # for ranged_candidates, linkage, word in ranging(self.candidates):
-        #     self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)
-        self.filtering()
 
-        # Testing
+    def show_results(self):
+        """The function for showing results"""
         print (self.filtered_candidates)
         for word in self.filtered_candidates:
             print ('WORD', word)
@@ -328,9 +320,14 @@ class SketchEntry:
         return self.dice >= other.dice
 
 
-"""The main function which calling the RussianSketches class"""
+# The main function which calling the RussianSketches class
 if __name__ == '__main__':
-    input_file = sys.argv[1]
+    try:
+        input_file = sys.argv[1]
+    except:
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
     rs = RussianSketches(input_file)
     rs.retrieve_candidates()
-    rs.count_association_measure()
+    rs.count_association_measures()
+    rs.filtering()
+    rs.show_results()
