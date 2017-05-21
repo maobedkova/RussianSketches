@@ -85,10 +85,3 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                     obj.jaccard = BigramAssocMeasures.jaccard(n_ii, (n_ix, n_xi), n_xx)
                     obj.fisher = BigramAssocMeasures.fisher(n_ii, (n_ix, n_xi), n_xx)
 
-def ranging(candidates):
-    """The function for ranging sketch candidates"""
-    for word in candidates:
-        for linkage in candidates[word]:
-            ranged_candidates = sorted(candidates[word][linkage], reverse=True)
-            yield ranged_candidates, linkage, word
-

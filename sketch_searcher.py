@@ -1,7 +1,6 @@
-# # Ranging candidates and saving the ranged candidates as an attribute
-# print ('=== Ranging candidates ===')
-# for ranged_candidates, linkage, word in ranging(self.candidates):
-#     self.create_candidates_dict(self.ranged_candidates, word, linkage, ranged_candidates)\
+# coding: utf-8
+
+__author__ = "maobedkova"
 
 import fnmatch
 import os
@@ -10,14 +9,16 @@ import sys
 from sketch_generator import SketchEntry
 
 def get_sketches_by_word(word):
+    """The function for getting sketches for a given word"""
     for filename in os.listdir('sketches'):
         if fnmatch.fnmatch(filename, word + '.pkl'):
             print ('FILENAME', filename)
             with open('sketches/' + filename, 'rb') as sk:
                 sketch = pickle.load(sk)
-                for link in sketch:
-                    print ('LINKAGE', link)
-                    for obj in sketch[link]:
+                # Ranging sketches for a word
+                for linkage in sketch:
+                    print ('LINKAGE', linkage)
+                    for obj in sorted(sketch[linkage], reverse=True)[:10]:
                         print (obj.first_word,
                                obj.first_word_pos,
                                obj.second_word,
@@ -35,6 +36,7 @@ def get_sketches_by_word(word):
                                obj.likelihood_ratio,
                                obj.jaccard,
                                obj.fisher)
+
 
 if __name__ == '__main__':
     try:
