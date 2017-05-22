@@ -117,7 +117,7 @@ class RussianSketches:
             sl.abs_freq = 1
             self.candidates[key][linkage] = [sl]
 
-        def change_entry(info,
+        def change_entry(info, word, linkage=linkage,
                          first_word=first_word, first_word_pos=first_word_pos,
                          second_word=second_word, second_word_pos=second_word_pos,
                          third_word=third_word, third_word_pos=third_word_pos):
@@ -126,14 +126,18 @@ class RussianSketches:
                 if first_word == obj.first_word and first_word_pos == obj.first_word_pos and \
                                 second_word == obj.second_word and second_word_pos == obj.second_word_pos and \
                                 third_word == obj.third_word and third_word_pos == obj.third_word_pos:
-                    obj.abs_freq += 1
-                    return True
+                    for obj in self.candidates[word][linkage]:
+                        if first_word == obj.first_word and first_word_pos == obj.first_word_pos and \
+                                        second_word == obj.second_word and second_word_pos == obj.second_word_pos and \
+                                        third_word == obj.third_word and third_word_pos == obj.third_word_pos:
+                            obj.abs_freq += 1
+                            return True
 
         def check_linkages_and_entries(word, tmp_dict, linkage=linkage):
             """The function for checking if linkage or entry exists"""
             if word in tmp_dict:
                 if linkage in tmp_dict[word]:
-                    if not change_entry(tmp_dict[word][linkage]):
+                    if not change_entry(tmp_dict[word][linkage], word):
                         add_entry(first_word)
                 else:
                     add_linkage(word)
@@ -335,10 +339,10 @@ class RussianSketches:
 
         if not os.path.exists('sketches'):
             os.mkdir('sketches')
-        if self.filtered_candidates:
-            create_files(self.filtered_candidates)
-        else:
-            create_files(self.candidates)
+        # if self.filtered_candidates:
+        #     create_files(self.filtered_candidates)
+        # else:
+        create_files(self.candidates)
 
 
 class SketchEntry:
