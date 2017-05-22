@@ -138,7 +138,7 @@ class RussianSketches:
             if word in tmp_dict:
                 if linkage in tmp_dict[word]:
                     if not change_entry(tmp_dict[word][linkage], word):
-                        add_entry(first_word)
+                        add_entry(word)
                 else:
                     add_linkage(word)
 
