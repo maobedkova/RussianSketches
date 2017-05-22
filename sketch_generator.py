@@ -117,18 +117,26 @@ class RussianSketches:
             sl.abs_freq = 1
             self.candidates[key][linkage] = [sl]
 
-        def change_entry(info, linkage=linkage,
+        def change_entry(info,
                          first_word=first_word, first_word_pos=first_word_pos,
-                         second_word=second_word, second_word_pos=second_word,
+                         second_word=second_word, second_word_pos=second_word_pos,
                          third_word=third_word, third_word_pos=third_word_pos):
             """The function for changing a sketch entry"""
             for obj in info:
                 if first_word == obj.first_word and first_word_pos == obj.first_word_pos and \
                                 second_word == obj.second_word and second_word_pos == obj.second_word_pos and \
-                                third_word == obj.third_word and third_word_pos == obj.third_word_pos and \
-                                linkage == obj.linkage:
+                                third_word == obj.third_word and third_word_pos == obj.third_word_pos:
                     obj.abs_freq += 1
                     return True
+
+        def check_linkages_and_entries(word, tmp_dict, linkage=linkage):
+            """The function for checking if linkage or entry exists"""
+            if word in tmp_dict:
+                if linkage in tmp_dict[word]:
+                    if not change_entry(tmp_dict[word][linkage]):
+                        add_entry(first_word)
+                else:
+                    add_linkage(word)
 
         # Check if it is the first entry
         if not self.candidates:
@@ -139,25 +147,9 @@ class RussianSketches:
         # Changing existing sketch entries
         else:
             tmp_dict = copy.deepcopy(self.candidates)
-            if first_word in tmp_dict:
-                if linkage in tmp_dict[first_word]:
-                    if not change_entry(tmp_dict[first_word][linkage]):
-                        add_entry(first_word)
-                else:
-                    add_linkage(first_word)
-            if second_word in tmp_dict:
-                if linkage in tmp_dict[second_word]:
-                    if not change_entry(tmp_dict[second_word][linkage]):
-                        add_entry(second_word)
-                else:
-                    add_linkage(second_word)
-            if third_word:
-                if third_word in tmp_dict:
-                    if linkage in tmp_dict[third_word]:
-                        if not change_entry(tmp_dict[third_word][linkage]):
-                            add_entry(third_word)
-                    else:
-                        add_linkage(third_word)
+            check_linkages_and_entries(first_word, tmp_dict)
+            check_linkages_and_entries(second_word, tmp_dict)
+            check_linkages_and_entries(third_word, tmp_dict)
             if first_word not in tmp_dict:
                 create_entry(first_word)
             if second_word not in tmp_dict:
@@ -400,11 +392,11 @@ if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
-    rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNCT') # RuSyntax, SynTagRus
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test_2.conll'
+    rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
     rs.show_results()
-    rs.writing_down_results()
+    # rs.writing_down_results()
