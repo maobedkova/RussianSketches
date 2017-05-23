@@ -2,7 +2,6 @@
 
 __author__ = "maobedkova"
 
-import copy
 import os
 import pickle
 import pymorphy2
@@ -60,7 +59,7 @@ class RussianSketches:
             infos = []
             i = 0
             for line in f:
-                if i % 1000 == 0:
+                if i % 10000 == 0:
                     print (i)
                 if len(line) == 1:
                     yield infos
@@ -142,6 +141,12 @@ class RussianSketches:
                 else:
                     add_linkage(word)
 
+        def deepcopy(dictionary):
+            new_dictionary = {}
+            for item in dictionary:
+                new_dictionary[item] = dictionary[item]
+            return new_dictionary
+
         # Check if it is the first entry
         if not self.candidates:
             create_entry(first_word)
@@ -150,7 +155,7 @@ class RussianSketches:
                 create_entry(third_word)
         # Changing existing sketch entries
         else:
-            tmp_dict = copy.deepcopy(self.candidates)
+            tmp_dict = deepcopy(self.candidates)
             check_linkages_and_entries(first_word, tmp_dict)
             check_linkages_and_entries(second_word, tmp_dict)
             check_linkages_and_entries(third_word, tmp_dict)
@@ -339,10 +344,10 @@ class RussianSketches:
 
         if not os.path.exists('sketches'):
             os.mkdir('sketches')
-        # if self.filtered_candidates:
-        #     create_files(self.filtered_candidates)
-        # else:
-        create_files(self.candidates)
+        if self.filtered_candidates:
+            create_files(self.filtered_candidates)
+        else:
+            create_files(self.candidates)
 
 
 class SketchEntry:
@@ -396,11 +401,11 @@ if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test_2.conll'
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
     rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
-    rs.show_results()
-    # rs.writing_down_results()
+    # rs.show_results()
+    rs.writing_down_results()
