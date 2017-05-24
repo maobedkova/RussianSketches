@@ -60,7 +60,7 @@ class RussianSketches:
             i = 0
             for line in f:
                 if i % 10000 == 0:
-                    print (i)
+                    print (i, flush=True)
                 if len(line) == 1:
                     yield infos
                     infos = []
@@ -186,7 +186,7 @@ class RussianSketches:
                 bigram_allowed = False
             return bigram_allowed
 
-        print ('=== Retrieving candidates ===')
+        print ('=== Retrieving candidates ===', flush=True)
         for infos in self.reading_conll():
             for info_1 in infos:
                 if info_1[2] == self.punct:
@@ -218,7 +218,7 @@ class RussianSketches:
 
     def filtering(self):
         """The function for filtering linkages for every part of speech"""
-        print ('=== Filtering candidates ===')
+        print ('=== Filtering candidates ===', flush=True)
 
         def create_candidates_dict(dict, word, linkage, arr):
             """The function for creating any dictionaries with sketch entries grouped by words and linkages"""
@@ -333,7 +333,7 @@ class RussianSketches:
 
     def writing_down_results(self):
         """The function for writing down the results in .json"""
-        print ('=== Writing down the results ===')
+        print ('=== Writing down the results ===', flush=True)
 
         def create_files(arr):
             """The function for creating sketch files in a sketch directory"""
@@ -401,7 +401,7 @@ if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/parsed_rusyntax.conll'
     rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()

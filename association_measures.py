@@ -31,7 +31,7 @@ def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
                         n_ixi = word_counts[obj.first_word + '_' + obj.third_word]
                     else:
                         n_ixi = 0
-                    if obj.first_word + '_' + obj.third_word in word_counts:
+                    if obj.second_word + '_' + obj.third_word in word_counts:
                         n_xii = word_counts[obj.second_word + '_' + obj.third_word]
                     else:
                         n_xii = 0
