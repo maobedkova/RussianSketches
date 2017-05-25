@@ -59,6 +59,8 @@ class RussianSketches:
             infos = []
             i = 0
             for line in f:
+                if line.startswith('#'):
+                    continue
                 if i % 10000 == 0:
                     print (i, flush=True)
                 if len(line) == 1:
@@ -401,7 +403,7 @@ if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/parsed_rusyntax.conll'
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/ru-common_crawl-008.conllu'
     rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
