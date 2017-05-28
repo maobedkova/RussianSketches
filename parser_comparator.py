@@ -1,3 +1,7 @@
+# coding: utf-8
+
+__author__ = "maobedkova"
+
 import numpy
 
 path = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/'

@@ -1,3 +1,7 @@
+# coding: utf-8
+
+__author__ = "maobedkova"
+
 from nltk.metrics.association import BigramAssocMeasures, TrigramAssocMeasures
 
 def count_statistics(candidates, bigram_corpus_size, trigram_corpus_size):
