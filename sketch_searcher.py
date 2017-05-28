@@ -6,7 +6,6 @@ import fnmatch
 import os
 import pickle
 import sys
-# from sketch_generator import SketchEntry
 
 
 class SketchEntry:
@@ -37,121 +36,121 @@ class SketchEntry:
 
     # Rewriting ==, !=, <, >, <=, >= python functions for proper sorting of sketches
     def __eq__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling == other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi == other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi == other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi == other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard == other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score == other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio == other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher == other.fisher
         else:
             return self.dice == other.dice
 
     def __ne__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling != other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi != other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi != other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi != other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard != other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score != other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio != other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher != other.fisher
         else:
             return self.dice != other.dice
 
     def __lt__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling < other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi < other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi < other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi < other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard < other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score < other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio < other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher < other.fisher
         else:
             return self.dice < other.dice
 
     def __gt__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling > other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi > other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi > other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi > other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard > other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score > other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio > other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher > other.fisher
         else:
             return self.dice > other.dice
 
     def __le__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling <= other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi <= other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi <= other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi <= other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard <= other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score <= other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio <= other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher <= other.fisher
         else:
             return self.dice <= other.dice
 
     def __ge__(self, other):
-        if mark == 'poisson-stirling':
+        if metric == 'poisson-stirling':
             return self.poisson_stirling >= other.poisson_stirling
-        elif mark == 'chi':
+        elif metric == 'chi':
             return self.chi >= other.chi
-        elif mark == 'pmi':
+        elif metric == 'pmi':
             return self.pmi >= other.pmi
-        elif mark == 'mi':
+        elif metric == 'mi':
             return self.mi >= other.mi
-        elif mark == 'jaccard':
+        elif metric == 'jaccard':
             return self.jaccard >= other.jaccard
-        elif mark == 't-score':
+        elif metric == 't-score':
             return self.t_score >= other.t_score
-        elif mark == 'likelihood-ratio':
+        elif metric == 'likelihood-ratio':
             return self.likelihood_ratio >= other.likelihood_ratio
-        elif mark == 'fisher':
+        elif metric == 'fisher':
             return self.fisher >= other.fisher
         else:
             return self.dice >= other.dice
@@ -176,24 +175,25 @@ def get_sketches_by_word(word, path, ex_number):
                                obj.linkage,
                                obj.abs_freq,
                                round(obj.dice, 3),
-                               round(obj.chi, 3))
-                               # round(obj.t_score, 3),
-                               # round(obj.poisson_stirling, 3),
-                               # round(obj.pmi, 3),
-                               # round(obj.mi, 3),
-                               # round(obj.likelihood_ratio, 3),
-                               # round(obj.jaccard, 3),
-                               # round(obj.fisher, 3))
+                               round(obj.chi, 3),
+                               round(obj.t_score, 3),
+                               round(obj.poisson_stirling, 3),
+                               round(obj.pmi, 3),
+                               round(obj.mi, 3),
+                               round(obj.likelihood_ratio, 3),
+                               round(obj.jaccard, 3),
+                               round(obj.fisher, 3))
 
 
 if __name__ == '__main__':
     try:
         word = sys.argv[1]
         path = sys.argv[2]
-        ex_number = sys.argv[3]
+        metric = sys.argv[3]
+        ex_number = sys.argv[4]
     except:
         word = input('Enter a word: ')
         path = input('Enter a path to sketch files: ')
+        metric = input('Enter a metric for ranging: ')
         ex_number = input('Enter a number of examples: ')
-    mark = 'chi'
     get_sketches_by_word(word, path, ex_number)
