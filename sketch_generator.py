@@ -369,15 +369,15 @@ class SketchEntry:
         self.linkage = linkage                  # type of a linkage
         self.abs_freq = 0                       # absolute frequency of the first word - second word collocation
         # Different association measures for sketches
-        self.dice = 0               # + +
-        self.poisson_stirling = 0   # + +
-        self.fisher = 0             # +
-        self.chi = 0                # + +
-        self.likelihood_ratio = 0   # + +
-        self.mi = 0                 # + +
-        self.jaccard = 0            # + +
-        self.pmi = 0                # + +
-        self.t_score = 0            # + +
+        self.dice = 0
+        self.poisson_stirling = 0
+        self.fisher = 0
+        self.chi = 0
+        self.likelihood_ratio = 0
+        self.mi = 0
+        self.jaccard = 0
+        self.pmi = 0
+        self.t_score = 0
 
 
 # The main function which calling the RussianSketches class
