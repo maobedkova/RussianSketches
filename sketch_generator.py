@@ -378,32 +378,13 @@ class SketchEntry:
         self.pmi = 0                # + +
         self.t_score = 0            # + +
 
-    # Rewriting ==, !=, <, >, <=, >= python functions for proper sorting of sketches
-    def __eq__(self, other):
-        return self.dice == other.dice
-
-    def __ne__(self, other):
-        return self.dice != other.dice
-
-    def __lt__(self, other):
-        return self.dice < other.dice
-
-    def __gt__(self, other):
-        return self.dice > other.dice
-
-    def __le__(self, other):
-        return self.dice <= other.dice
-
-    def __ge__(self, other):
-        return self.dice >= other.dice
-
 
 # The main function which calling the RussianSketches class
 if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/ru-common_crawl-008.conllu'
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
     rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
