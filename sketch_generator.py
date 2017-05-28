@@ -174,7 +174,7 @@ class RussianSketches:
 
         def add_trigram(head, bigram_allowed):
             """The function for adding trigrams"""
-            if head[2] == self.adp or head[1] == 'и':
+            if head[2] == self.adp or head[1].lower() == 'и':
                 self.trigram_corpus_size += 1
                 self.add_sketch_entry(
                     info_1[2] + '_' + info_2[2] + '_' + info_3[2],  # type of a linkage
@@ -242,7 +242,7 @@ class RussianSketches:
 
         def filter_check_conj(word, word2, pos2, pos3, obj, linkage):
             """The function for checking the presence of the conjunction и"""
-            if word == 'и' and pos2 == pos3:
+            if word.lower() == 'и' and pos2 == pos3:
                 create_candidates_dict(self.filtered_candidates, word2, linkage, [obj])
                 return True
 
@@ -384,11 +384,11 @@ if __name__ == '__main__':
     try:
         input_file = sys.argv[1]
     except:
-        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test.conll'
+        input_file = 'C:/Users/Maria/OneDrive/HSE/Projects/Sketches/corpora/sketch_test_2.conll'
     rs = RussianSketches(input_file, 'S', 'A', 'V', 'ADV', 'PR', None, 'PUNC') # RuSyntax, SynTagRus
     # rs = RussianSketches(input_file, 'NOUN', 'ADJ', 'VERB', 'ADV', 'ADP', None, 'PUNCT', True) # SyntaxNet
     rs.retrieve_candidates()
     rs.count_association_measures()
     rs.filtering()
-    # rs.show_results()
+    rs.show_results()
     rs.writing_down_results()
