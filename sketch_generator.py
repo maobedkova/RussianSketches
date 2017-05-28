@@ -236,7 +236,8 @@ class RussianSketches:
             """The function for checking the presence in the dictionary"""
             if pos1 in self.possible_trigrams \
                     and pos2 in self.possible_trigrams[pos1] \
-                    and pos3 in self.possible_trigrams[pos1][pos2]:
+                    and pos3 in self.possible_trigrams[pos1][pos2] \
+                    and pos1 + '_' + pos2 + '_' + pos3 == linkage:
                 create_candidates_dict(self.filtered_candidates, word, linkage, [obj])
                 return True
 
