@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/RussianSketches.iml" filepath="$PROJECT_DIR$/.idea/RussianSketches.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../SyntParserComparator/.idea/SyntParserComparator.iml" filepath="$PROJECT_DIR$/../SyntParserComparator/.idea/SyntParserComparator.iml" />
+      <module fileurl="file://C:\Users\Maria\OneDrive\HSE\Projects\Sketches\syntaxnet_wrapper-master\.idea\syntaxnet_wrapper-master.iml" filepath="C:\Users\Maria\OneDrive\HSE\Projects\Sketches\syntaxnet_wrapper-master\.idea\syntaxnet_wrapper-master.iml" />
+    </modules>
+  </component>
+</project>
