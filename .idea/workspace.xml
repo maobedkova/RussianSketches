@@ -2,7 +2,56 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="453ab9a8-6f5a-4fda-b1e3-7d54874841d1" name="Default" comment="relocate parser_comparator.py">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/RussianSketches.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/БЫТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ВАЖНЫЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ВОВРЕМЯ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ДЕЛО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЕРЕМЕЕВИЧ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЗАМЕТКА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЗДОРОВАТЬСЯ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ИНОГДА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ИНСТАНЦИЯ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/КОЕ-КТО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЛЕГКО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МАШИНА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МОЖНО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МОЧЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МУХА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/НАЧАЛЬНИК.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/НИЖЕСТОЯЩИЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ОБЛАСТНОЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ОЖИДАТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПИСАТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПОСЕТИТЕЛЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРЕВОСХОДСТВО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИВОДИТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИЕМНАЯ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИХОДИТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРОСТОЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПСЕВДОНИМ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РАБОТА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РЕШАТЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РУКА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СВЯЗЬ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЕКРЕТАРША.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЕМЕН.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СИЛЬНЫЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЛАБЫЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СТЕНГАЗЕТА.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СТРАТЕГИЯ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/УПРАВЛЕНИЕ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/УТРО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ХОРОШИЙ.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЧАСТО.pkl" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЧЕЛОВЕК.pkl" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sketch_searcher.py" afterPath="$PROJECT_DIR$/sketch_searcher.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -37,7 +86,7 @@
       <file leaf-file-name="sketch_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sketch_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="250">
+            <state relative-caret-position="25">
               <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
                 <element signature="e#44#53#0" expanded="true" />
@@ -46,21 +95,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="association_measures.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/association_measures.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="sketch_searcher.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="sketch_searcher.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3175">
-              <caret line="127" column="30" lean-forward="false" selection-start-line="127" selection-start-column="30" selection-end-line="127" selection-end-column="30" />
+            <state relative-caret-position="212">
+              <caret line="165" column="38" lean-forward="true" selection-start-line="165" selection-start-column="38" selection-end-line="165" selection-end-column="38" />
               <folding>
                 <element signature="e#44#58#0" expanded="true" />
               </folding>
@@ -126,9 +165,9 @@
         <option value="$PROJECT_DIR$/gf.py" />
         <option value="$PROJECT_DIR$/parser_comparator.py" />
         <option value="$PROJECT_DIR$/association_measures.py" />
-        <option value="$PROJECT_DIR$/sketch_searcher.py" />
         <option value="$PROJECT_DIR$/sketch_generator.py" />
         <option value="$PROJECT_DIR$/../SyntParserComparator/parser_comparator.py" />
+        <option value="$PROJECT_DIR$/sketch_searcher.py" />
       </list>
     </option>
   </component>
@@ -162,7 +201,6 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -177,6 +215,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -834,19 +873,18 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="0" width="1934" height="1094" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18933055" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18933055" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26673865" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32937366" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32937366" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26673865" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1003,19 +1041,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
+    <entry file="file://$PROJECT_DIR$/association_measures.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3175">
-          <caret line="127" column="30" lean-forward="false" selection-start-line="127" selection-start-column="30" selection-end-line="127" selection-end-column="30" />
-          <folding>
-            <element signature="e#44#58#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="25">
+          <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sketch_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="250">
+        <state relative-caret-position="25">
           <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#44#53#0" expanded="true" />
@@ -1023,11 +1059,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/association_measures.py">
+    <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="12" column="13" lean-forward="true" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="212">
+          <caret line="165" column="38" lean-forward="true" selection-start-line="165" selection-start-column="38" selection-end-line="165" selection-end-column="38" />
+          <folding>
+            <element signature="e#44#58#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

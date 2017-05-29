@@ -166,6 +166,8 @@ def get_sketches_by_word(word, path, ex_number):
                 for linkage in sketch:
                     print ('LINKAGE', linkage)
                     for obj in sorted(sketch[linkage], reverse=True)[:int(ex_number)]:
+                        if obj.abs_freq == 1:
+                            continue
                         print (obj.first_word,
                                obj.first_word_pos,
                                obj.second_word,
