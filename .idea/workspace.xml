@@ -1,56 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="453ab9a8-6f5a-4fda-b1e3-7d54874841d1" name="Default" comment="relocate parser_comparator.py">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/RussianSketches.iml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/БЫТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ВАЖНЫЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ВОВРЕМЯ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ДЕЛО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЕРЕМЕЕВИЧ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЗАМЕТКА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЗДОРОВАТЬСЯ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ИНОГДА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ИНСТАНЦИЯ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/КОЕ-КТО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЛЕГКО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МАШИНА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МОЖНО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МОЧЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/МУХА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/НАЧАЛЬНИК.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/НИЖЕСТОЯЩИЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ОБЛАСТНОЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ОЖИДАТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПИСАТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПОСЕТИТЕЛЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРЕВОСХОДСТВО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИВОДИТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИЕМНАЯ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРИХОДИТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПРОСТОЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ПСЕВДОНИМ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РАБОТА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РЕШАТЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/РУКА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СВЯЗЬ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЕКРЕТАРША.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЕМЕН.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СИЛЬНЫЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СЛАБЫЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СТЕНГАЗЕТА.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/СТРАТЕГИЯ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/УПРАВЛЕНИЕ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/УТРО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ХОРОШИЙ.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЧАСТО.pkl" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/sketches/ЧЕЛОВЕК.pkl" afterPath="" />
+    <list default="true" id="453ab9a8-6f5a-4fda-b1e3-7d54874841d1" name="Default" comment="omit hapax">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/RussianSketches.iml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sketch_searcher.py" afterPath="$PROJECT_DIR$/sketch_searcher.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -86,7 +42,7 @@
       <file leaf-file-name="sketch_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sketch_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
+            <state relative-caret-position="150">
               <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
               <folding>
                 <element signature="e#44#53#0" expanded="true" />
@@ -98,8 +54,8 @@
       <file leaf-file-name="sketch_searcher.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="165" column="38" lean-forward="true" selection-start-line="165" selection-start-column="38" selection-end-line="165" selection-end-column="38" />
+            <state relative-caret-position="430">
+              <caret line="171" column="47" lean-forward="false" selection-start-line="171" selection-start-column="47" selection-end-line="171" selection-end-column="47" />
               <folding>
                 <element signature="e#44#58#0" expanded="true" />
               </folding>
@@ -200,7 +156,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -215,7 +171,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -524,13 +480,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1493671475850</updated>
-    </task>
-    <task id="LOCAL-00012" summary="add filter by ~NOUN">
-      <created>1494454641961</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1494454641961</updated>
     </task>
     <task id="LOCAL-00013" summary="minor changes in filtering function">
       <created>1494522144644</created>
@@ -868,13 +817,21 @@
       <option name="project" value="LOCAL" />
       <updated>1496000575479</updated>
     </task>
-    <option name="localTasksCounter" value="61" />
+    <task id="LOCAL-00061" summary="omit hapax">
+      <created>1496090558873</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1496090558875</updated>
+    </task>
+    <option name="localTasksCounter" value="62" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-11" y="0" width="1934" height="1094" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18933055" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18933055" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -923,7 +880,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="rewrote filtration" />
     <MESSAGE value="universal tags for pymorphy2" />
     <MESSAGE value="ranamed" />
     <MESSAGE value="added RuSyntax, boosted" />
@@ -948,7 +904,8 @@
     <MESSAGE value="debug linkage through conjunction" />
     <MESSAGE value="debug trigram filtering" />
     <MESSAGE value="relocate parser_comparator.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="relocate parser_comparator.py" />
+    <MESSAGE value="omit hapax" />
+    <option name="LAST_COMMIT_MESSAGE" value="omit hapax" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1045,13 +1002,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
           <caret line="12" column="13" lean-forward="false" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sketch_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
+        <state relative-caret-position="150">
           <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
           <folding>
             <element signature="e#44#53#0" expanded="true" />
@@ -1061,8 +1017,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="165" column="38" lean-forward="true" selection-start-line="165" selection-start-column="38" selection-end-line="165" selection-end-column="38" />
+        <state relative-caret-position="430">
+          <caret line="171" column="47" lean-forward="false" selection-start-line="171" selection-start-column="47" selection-end-line="171" selection-end-column="47" />
           <folding>
             <element signature="e#44#58#0" expanded="true" />
           </folding>
