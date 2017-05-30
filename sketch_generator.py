@@ -10,24 +10,29 @@ from association_measures import count_statistics
 
 morph = pymorphy2.MorphAnalyzer()
 
+def parsing(path_rusyntax, input_file, output_file):
+    """The function for parsing with RuSyntax if it is needed"""
+    os.system('python ' + path_rusyntax + 'ru-syntax.py ' + input_file + ' ' + output_file)
+
 class RussianSketches:
     """The class of Russian sketches which contains sketches for words"""
 
-    def __init__(self, input_file, noun, adj, verb, adv, adp, praed, punct, adp_mark=False):
+    def __init__(self, input_file, noun, adj, verb, adv, adp, praed, punct,
+                 adp_mark=False):
         """Attrbutes of the RussianSketches class"""
         self.input_file = input_file
-        self.candidates = {}            # dictionary of sketch entries grouped by words and linkages
-        self.filtered_candidates = {}   # dictionary of filtered by a part of speech sketch candidates
-        self.bigram_corpus_size = 0     # number of bigrams in a corpus
-        self.trigram_corpus_size = 0    # number of trigrams in a corpus
-        self.adp_mark = adp_mark        # if False noun is dependent of adposition; if True adposition is dependent of noun
-        self.adp = adp                  # tag for adposition
-        self.punct = punct              # tag for punctuation marks
+        self.candidates = {}                # dictionary of sketch entries grouped by words and linkages
+        self.filtered_candidates = {}       # dictionary of filtered by a part of speech sketch candidates
+        self.bigram_corpus_size = 0         # number of bigrams in a corpus
+        self.trigram_corpus_size = 0        # number of trigrams in a corpus
+        self.adp_mark = adp_mark            # if False noun is dependent of adposition; if True adposition is dependent of noun
+        self.adp = adp                      # tag for adposition
+        self.punct = punct                  # tag for punctuation marks
         self.possible_bigrams = {
             noun: [adj, adv, verb, noun],
             adj: [adv, noun],
             verb: [adv, noun],
-            adv: [verb, noun],
+            adv: [verb, noun, praed, adj],
             praed: [adv, noun, verb]
         }                               # dictionary of part of speeches that are allowed for bigrams
         self.possible_trigrams = {
