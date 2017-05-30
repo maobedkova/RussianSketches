@@ -42,7 +42,7 @@ With a Python interpreter:
 import SketchEntry
 import get_sketches_by_word
 metric = 'dice'
-ignored_linkages = [] # can contain any linkages that shoul be ignored
+ignored_linkages = [] # can contain any linkages that should be ignored
 get_sketches_by_word(<wanted word>, <path to skethces directory>, <number of sketch examples to show>, ignored_linkages)
 ```
 It is possible to choose one of the nine following metrics for ranging:
