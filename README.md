@@ -1,5 +1,6 @@
 # RussianSketches
-The algorithm of syntactic sketches for Russian.
+
+This project aims to introduce the new instrument of sketch generation on the basis of a language corpus. The main feature of the new sketch generation instrument is using of syntactic information from a sentence to find sketches. The new instrument of syntactic sketches provides the opportunity to range sketch output with one of nine association measures (Dice, chi-squared, likelihood ratio, t-score, PMI, MI, Jaccard, Fisher, Poisson-Stirling) and can filter out the least relevant syntactic relations for different Russian parts of speech. Moreover, this instrument is universal because it can be used for every Russian corpus, even without syntactic tagging. In this case, tagging is implemented by RuSyntax, which occurred to be the most high-quality tagging instrument for Russian. The recall of the sketch generation instrument is over 80% what is a good result for sketches on the basis of small Russian corpus.
 
 ## The algorithm of sketch generation -- sketch_generator.py
 This algorithm generates sketches on the basis of a given corpus.
