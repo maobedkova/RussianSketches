@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="453ab9a8-6f5a-4fda-b1e3-7d54874841d1" name="Default" comment="">
+    <list default="true" id="453ab9a8-6f5a-4fda-b1e3-7d54874841d1" name="Default" comment="make it universal">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/RussianSketches.iml" afterPath="$PROJECT_DIR$/.idea/RussianSketches.iml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sketch_generator.py" afterPath="$PROJECT_DIR$/sketch_generator.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sketch_searcher.py" afterPath="$PROJECT_DIR$/sketch_searcher.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -15,7 +19,7 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/RussianSketches$test.coverage" NAME="test Coverage Results" MODIFIED="1495203851598" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/RussianSketches$gfhjk.coverage" NAME="gfhjk Coverage Results" MODIFIED="1495286810883" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/RussianSketches$sketch_searcher.coverage" NAME="sketch_searcher Coverage Results" MODIFIED="1495972766828" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/RussianSketches$sketch_searcher.coverage" NAME="sketch_searcher Coverage Results" MODIFIED="1496186641374" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/RussianSketches$sketch_generator.coverage" NAME="sketch_generator Coverage Results" MODIFIED="1496050926233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/RussianSketches$sketch_generation.coverage" NAME="sketch_generation Coverage Results" MODIFIED="1495114241416" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/RussianSketches$cut_conll.coverage" NAME="cut_conll Coverage Results" MODIFIED="1495550499146" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../../HSE/Projects/Sketches/corpora" />
@@ -38,8 +42,8 @@
       <file leaf-file-name="sketch_generator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/sketch_generator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="400">
+              <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
               <folding>
                 <element signature="e#44#53#0" expanded="true" />
               </folding>
@@ -50,8 +54,8 @@
       <file leaf-file-name="sketch_searcher.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="475">
-              <caret line="168" column="43" lean-forward="false" selection-start-line="168" selection-start-column="43" selection-end-line="168" selection-end-column="43" />
+            <state relative-caret-position="212">
+              <caret line="158" column="64" lean-forward="false" selection-start-line="158" selection-start-column="64" selection-end-line="158" selection-end-column="64" />
               <folding>
                 <element signature="e#44#58#0" expanded="true" />
               </folding>
@@ -117,8 +121,8 @@
         <option value="$PROJECT_DIR$/gf.py" />
         <option value="$PROJECT_DIR$/parser_comparator.py" />
         <option value="$PROJECT_DIR$/association_measures.py" />
-        <option value="$PROJECT_DIR$/sketch_generator.py" />
         <option value="$PROJECT_DIR$/../SyntParserComparator/parser_comparator.py" />
+        <option value="$PROJECT_DIR$/sketch_generator.py" />
         <option value="$PROJECT_DIR$/sketch_searcher.py" />
       </list>
     </option>
@@ -152,8 +156,19 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RussianSketches" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SyntParserComparator" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="RussianSketches" />
@@ -166,7 +181,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -188,7 +202,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.sketch_generator">
+  <component name="RunManager" selected="Python.sketch_searcher">
     <configuration default="false" name="sketch_generator" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -458,8 +472,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.sketch_generator" />
-        <item index="1" class="java.lang.String" itemvalue="Python.sketch_searcher" />
+        <item index="0" class="java.lang.String" itemvalue="Python.sketch_searcher" />
+        <item index="1" class="java.lang.String" itemvalue="Python.sketch_generator" />
         <item index="2" class="java.lang.String" itemvalue="Python.ghjkl" />
         <item index="3" class="java.lang.String" itemvalue="Python.memdebug" />
         <item index="4" class="java.lang.String" itemvalue="Python.cut_conll" />
@@ -476,20 +490,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1493671475850</updated>
-    </task>
-    <task id="LOCAL-00014" summary="add trigram sketches opportunity">
-      <created>1494534262835</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1494534262835</updated>
-    </task>
-    <task id="LOCAL-00015" summary="add filtering and ranging for trigrams">
-      <created>1494543355059</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1494543355059</updated>
     </task>
     <task id="LOCAL-00016" summary="add lemmatization">
       <created>1494583684003</created>
@@ -820,7 +820,21 @@
       <option name="project" value="LOCAL" />
       <updated>1496095469621</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="omit hapax">
+      <created>1496095721070</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1496095721071</updated>
+    </task>
+    <task id="LOCAL-00064" summary="make it universal">
+      <created>1496185398668</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1496185398669</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -876,7 +890,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="universal tags for pymorphy2" />
     <MESSAGE value="ranamed" />
     <MESSAGE value="added RuSyntax, boosted" />
     <MESSAGE value="debug" />
@@ -901,7 +914,8 @@
     <MESSAGE value="debug trigram filtering" />
     <MESSAGE value="relocate parser_comparator.py" />
     <MESSAGE value="omit hapax" />
-    <option name="LAST_COMMIT_MESSAGE" value="omit hapax" />
+    <MESSAGE value="make it universal" />
+    <option name="LAST_COMMIT_MESSAGE" value="make it universal" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -987,13 +1001,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../SyntParserComparator/parser_comparator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="242" column="31" lean-forward="true" selection-start-line="242" selection-start-column="31" selection-end-line="242" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/association_measures.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="25">
@@ -1001,10 +1008,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../SyntParserComparator/parser_comparator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="6650">
+          <caret line="266" column="54" lean-forward="false" selection-start-line="266" selection-start-column="4" selection-end-line="266" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/sketch_generator.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="400">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding>
             <element signature="e#44#53#0" expanded="true" />
           </folding>
@@ -1013,8 +1028,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sketch_searcher.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="475">
-          <caret line="168" column="43" lean-forward="false" selection-start-line="168" selection-start-column="43" selection-end-line="168" selection-end-column="43" />
+        <state relative-caret-position="212">
+          <caret line="158" column="64" lean-forward="false" selection-start-line="158" selection-start-column="64" selection-end-line="158" selection-end-column="64" />
           <folding>
             <element signature="e#44#58#0" expanded="true" />
           </folding>

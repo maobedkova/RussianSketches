@@ -156,7 +156,7 @@ class SketchEntry:
             return self.dice >= other.dice
 
 
-def get_sketches_by_word(word, path, ex_number):
+def get_sketches_by_word(word, path, ex_number, ignored_linkages):
     """The function for getting sketches for a given word"""
     for filename in os.listdir(path):
         if fnmatch.fnmatch(filename, word + '.pkl'):
@@ -164,9 +164,11 @@ def get_sketches_by_word(word, path, ex_number):
             with open(path + filename, 'rb') as sk:
                 sketch = pickle.load(sk)
                 for linkage in sketch:
+                    if linkage in ignored_linkages:
+                        continue
                     print ('LINKAGE', linkage)
                     for obj in sorted(sketch[linkage], reverse=True)[:int(ex_number)]:
-                        if obj.abs_freq < 3:
+                        if obj.abs_freq < 2:
                             continue
                         print (obj.first_word,
                                obj.first_word_pos,
@@ -198,4 +200,5 @@ if __name__ == '__main__':
         path = input('Enter a path to sketch files: ')
         metric = input('Enter a metric for ranging: ')
         ex_number = input('Enter a number of examples: ')
-    get_sketches_by_word(word, path, ex_number)
+    ignored_linkages = []
+    get_sketches_by_word(word, path, ex_number, ignored_linkages)
