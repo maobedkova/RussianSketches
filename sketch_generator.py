@@ -90,16 +90,35 @@ class RussianSketches:
                          third_word=None, third_word_pos=None):
         """The function for adding new sketch candidates in a dictionary"""
 
+        def link_plus(key, linkage=linkage,
+                      first_word=first_word, first_word_pos=first_word_pos,
+                      second_word=second_word, second_word_pos=second_word_pos,
+                      third_word=third_word, third_word_pos=third_word_pos):
+            """The function for presenting linkages more user friendly"""
+            if key == first_word:
+                if third_word:
+                    linkage += ' [[' + first_word_pos + ']] + ' + second_word_pos + ' + ' + third_word_pos
+                else:
+                    linkage += ' [[' + first_word_pos + ']] + ' + second_word_pos
+            elif key == second_word:
+                if third_word:
+                    linkage += ' ' + first_word_pos + ' + [' + second_word_pos + '] + ' + third_word_pos
+                else:
+                    linkage += ' ' + first_word_pos + ' + [' + second_word_pos + ']'
+            else:
+                linkage += ' ' + first_word_pos + ' + ' + second_word_pos + ' + [' + third_word_pos + ']'
+            return linkage
+
         def create_entry(key, linkage=linkage,
                          first_word=first_word, first_word_pos=first_word_pos,
                          second_word=second_word, second_word_pos=second_word_pos,
                          third_word=third_word, third_word_pos=third_word_pos):
             """The function for creating a new sketch entry"""
             sl = SketchEntry(first_word, first_word_pos,
-                             second_word, second_word_pos, linkage,
+                             second_word, second_word_pos, link_plus(key),
                              third_word, third_word_pos)
             sl.abs_freq = 1
-            self.candidates[key] = {linkage: [sl]}
+            self.candidates[key] = {link_plus(key): [sl]}
 
         def add_entry(key, linkage=linkage,
                       first_word=first_word, first_word_pos=first_word_pos,
@@ -107,10 +126,10 @@ class RussianSketches:
                       third_word=third_word, third_word_pos=third_word_pos):
             """The function for adding a new sketch entry to an existing linkage"""
             sl = SketchEntry(first_word, first_word_pos,
-                             second_word, second_word_pos, linkage,
+                             second_word, second_word_pos, link_plus(key),
                              third_word, third_word_pos)
             sl.abs_freq = 1
-            self.candidates[key][linkage] += [sl]
+            self.candidates[key][link_plus(key)] += [sl]
 
         def add_linkage(key, linkage=linkage,
                         first_word=first_word, first_word_pos=first_word_pos,
@@ -118,10 +137,10 @@ class RussianSketches:
                         third_word=third_word, third_word_pos=third_word_pos):
             """The function for adding a new linkage in a bigram sketch entry"""
             sl = SketchEntry(first_word, first_word_pos,
-                             second_word, second_word_pos, linkage,
+                             second_word, second_word_pos, link_plus(key),
                              third_word, third_word_pos)
             sl.abs_freq = 1
-            self.candidates[key][linkage] = [sl]
+            self.candidates[key][link_plus(key)] = [sl]
 
         def change_entry(info, word, linkage=linkage,
                          first_word=first_word, first_word_pos=first_word_pos,
