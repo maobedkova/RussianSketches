@@ -13,19 +13,22 @@ With a Python interpreter:
 ```
 import RussianSketches
 import SketchEntry
-rs = RussianSketches(<corpus_name.conll>, tag_for_noun,
-                                          tag_for_adjective,
-                                          tag_for_verb,
-                                          tag_for_adverb,
-                                          tag_for_preposition,
-                                          tag_for_praedicative,
-                                          tag_for_punctuation)  # initialization of the RS class
+parsing(<path to RuSyntax>, <input file>, <output file>)  # function for parsing if it is needed
+rs = RussianSketches(<corpus_name.conll>, <tag_for_noun>,
+                                          <tag_for_adjective>,
+                                          <tag_for_verb>,
+                                          <tag_for_adverb>,
+                                          <tag_for_preposition>,
+                                          <tag_for_praedicative>,
+                                          <tag_for_punctuation>)  # initialization of the RS class
 rs.retrieve_candidates()        # function for retrieving candidates from a corpus
 rs.count_association_measures() # function for counting association measures for candidates
 rs.filtering()                  # function for filtering linkages for candidates
 rs.show_results()               # function for printing out the results
 rs.writing_down_results()       # function for writing down the sketch files
 ```
+
+Dictionaries **possible_bigrams** in line 31 and **possible_trigrams** in line 38 can be changed if new linkages or parts of speech are needed.
 
 ## The algorithm of sketch search -- sketch_searcher.py
 This algorithm shows the sketches for a wanted word.
@@ -39,7 +42,8 @@ With a Python interpreter:
 import SketchEntry
 import get_sketches_by_word
 metric = 'dice'
-get_sketches_by_word(<wanted word>, <path to skethces directory>, <number of sketch examples to show>)
+ignored_linkages = [] # can contain any linkages that should be ignored
+get_sketches_by_word(<wanted word>, <path to skethces directory>, <number of sketch examples to show>, ignored_linkages)
 ```
 It is possible to choose one of the nine following metrics for ranging:
 * 'dice'
@@ -51,5 +55,3 @@ It is possible to choose one of the nine following metrics for ranging:
 * 'mi'
 * 'likelihood-ratio'
 * 't-score'
-
-
