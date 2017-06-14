@@ -43,7 +43,10 @@ import SketchEntry
 import get_sketches_by_word
 metric = 'dice'
 ignored_linkages = [] # can contain any linkages that should be ignored
-get_sketches_by_word(<wanted word>, <path to skethces directory>, <number of sketch examples to show>, ignored_linkages)
+get_sketches_by_word(<wanted word>, 
+                     <path to skethces directory>, 
+                     <number of sketch examples to show>, 
+                     ignored_linkages)
 ```
 It is possible to choose one of the nine following metrics for ranging:
 * 'dice'
@@ -55,3 +58,5 @@ It is possible to choose one of the nine following metrics for ranging:
 * 'mi'
 * 'likelihood-ratio'
 * 't-score'
+
+Search is case sensitive. The case of a searched lemma should be the same as the case of a lemma provided by your morphological parser. **RuSyntax** writes all letters CAPITAL.
